@@ -1,6 +1,9 @@
 class CreateRemexifyLognotes < ActiveRecord::Migration
   def self.up
     create_table :<%= table_name %> do |t|
+      # 0 the more high the level, the more important.
+      t.integer :level, null: false, default: 0
+
       # let your log unique
       t.string :md5, null: false
 
