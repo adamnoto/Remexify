@@ -21,6 +21,9 @@ class CreateRemexifyLognotes < ActiveRecord::Migration
       # additional description that want to be logged as well
       t.text :description
 
+      # how many times the system logging this error?
+      t.integer :frequency, null: false, default: 1
+
       t.timestamps
     end
     add_index :<%= table_name %>, [:md5], unique: true
