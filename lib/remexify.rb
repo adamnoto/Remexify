@@ -43,17 +43,17 @@ module Remexify
       options[:description] = options[:desc] if options[:desc]
       options[:description] ||= ""
 
-      model.create({
-                       level: level,
-                       message: message,
-                       backtrace: backtrace,
-                       class_name: options[:class],
-                       method_name: options[:method],
-                       line: options[:line],
-                       file_name: options[:file],
-                       parameters: options[:parameters].inspect,
-                       description: options[:description]
-                   })
+      config.model.create({
+         level: level,
+         message: message,
+         backtrace: backtrace,
+         class_name: options[:class],
+         method_name: options[:method],
+         line: options[:line],
+         file_name: options[:file],
+         parameters: options[:parameters].inspect,
+         description: options[:description]
+      })
 
       # mark already logged if DisplayableError
       if obj.is_a?(StandardError) || obj.is_a?(DisplayableError)
