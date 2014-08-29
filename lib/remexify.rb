@@ -53,20 +53,20 @@ module Remexify
       md5 = Digest::MD5.hexdigest hashed
 
       # assure md5 is not yet exist, if exist, don't save
-      raise ActiveRecord::Rollback if System::Loggers.where(md5: md5).first
-
-      config.model.create({
-         md5: md5,
-         level: level,
-         message: message,
-         backtrace: backtrace,
-         class_name: class_name,
-         method_name: options[:method],
-         line: options[:line],
-         file_name: options[:file],
-         parameters: options[:parameters].inspect,
-         description: options[:description]
-      })
+      unless config.model.where(md5: md5).first
+        config.model.create({
+          md5: md5,
+          level: level,
+          message: message,
+          backtrace: backtrace,
+          class_name: class_name,
+          method_name: options[:method],
+          line: options[:line],
+          file_name: options[:file],
+          parameters: options[:parameters].inspect,
+          description: options[:description]
+        })
+      end
 
       # mark already logged if DisplayableError
       if obj.is_a?(StandardError) || obj.is_a?(DisplayableError)
