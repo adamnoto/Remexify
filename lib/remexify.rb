@@ -1,5 +1,4 @@
 require "remexify/version"
-require "gem_config"
 
 module Remexify
   include GemConfig::Base
