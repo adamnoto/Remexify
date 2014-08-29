@@ -1,5 +1,7 @@
 require "remexify/version"
 require "active_support/configurable"
+require "remexify/standard_error"
+require "remexify/runtime_error"
 
 module Remexify
   include ActiveSupport::Configurable
@@ -16,7 +18,7 @@ module Remexify
 
     # options = class, method, line, file, params/param/parameters, desc/description
     def write(level, obj, options = {})
-      if (obj.is_a?(StandardError) || err.is_a?(RuntimeError)) && obj.already_logged
+      if (obj.is_a?(StandardError) || obj.is_a?(RuntimeError)) && obj.already_logged
         return
       end
 
