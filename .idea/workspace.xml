@@ -25,11 +25,11 @@
     <splitter split-orientation="vertical" split-proportion="0.5">
       <split-first>
         <leaf>
-          <file leaf-file-name="remexify.gemspec" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="remexify.gemspec" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/remexify.gemspec">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
-                  <caret line="24" column="33" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
+                <state vertical-scroll-proportion="0.5683453" vertical-offset="217" max-vertical-offset="495">
+                  <caret line="25" column="42" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
                   <folding />
                 </state>
               </provider>
@@ -45,11 +45,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="remexify.rb" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="remexify.rb" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/lib/remexify.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="291">
-                  <caret line="0" column="26" selection-start-line="0" selection-start-column="26" selection-end-line="0" selection-end-column="26" />
+                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="240">
+                  <caret line="4" column="25" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
                   <folding />
                 </state>
               </provider>
@@ -110,8 +110,8 @@
         <option value="$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb" />
         <option value="$PROJECT_DIR$/lib/generators/templates/initialize_remexify.rb" />
         <option value="$PROJECT_DIR$/lib/generators/remexify_generator.rb" />
-        <option value="$PROJECT_DIR$/remexify.gemspec" />
         <option value="$PROJECT_DIR$/lib/remexify.rb" />
+        <option value="$PROJECT_DIR$/remexify.gemspec" />
       </list>
     </option>
   </component>
@@ -436,18 +436,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/remexify.gemspec">
+    <entry file="file://$PROJECT_DIR$/lib/remexify.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="127" max-vertical-offset="495">
-          <caret line="24" column="33" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="240">
+          <caret line="4" column="25" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/remexify.rb">
+    <entry file="file://$PROJECT_DIR$/remexify.gemspec">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="291">
-          <caret line="0" column="26" selection-start-line="0" selection-start-column="26" selection-end-line="0" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.5683453" vertical-offset="217" max-vertical-offset="495">
+          <caret line="25" column="42" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
           <folding />
         </state>
       </provider>
