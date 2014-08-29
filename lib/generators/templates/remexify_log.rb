@@ -1,6 +1,6 @@
 class RemexifyLog < ActiveRecord::Migration
   def self.up
-    create_table :remexify_logs do |t|
+    create_table :remexify_lognotes do |t|
       # let your log unique
       t.string :md5, null: false
 

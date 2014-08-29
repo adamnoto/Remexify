@@ -20,8 +20,8 @@ module Remexify
       end
 
       def generate_model
-        # invoke "active_record:model", ["Remexify::Logs"], migration: false
-        invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
+        invoke "active_record:model", ["Remexify::Lognotes"], migration: false
+        # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
       end
     end
   end
