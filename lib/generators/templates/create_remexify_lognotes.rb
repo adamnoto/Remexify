@@ -20,7 +20,7 @@ class CreateRemexifyLognotes < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :remexify_logs, [:md5], unique: true
+    add_index :remexify_lognotes, [:md5], unique: true
   end
 
   def self.down

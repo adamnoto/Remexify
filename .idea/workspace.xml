@@ -45,11 +45,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="remexify_log.rb" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/lib/generators/templates/remexify_log.rb">
+          <file leaf-file-name="create_remexify_lognotes.rb" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-                  <caret line="0" column="12" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
+                <state vertical-scroll-proportion="0.6701031" vertical-offset="135" max-vertical-offset="555">
+                  <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
                   <folding />
                 </state>
               </provider>
@@ -59,7 +59,7 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="remexify_generator.rb" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="remexify_generator.rb" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lib/generators/remexify_generator.rb">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.33333334" vertical-offset="179" max-vertical-offset="495">
@@ -89,6 +89,7 @@
         <option value="$PROJECT_DIR$/lib/generators/active_record/remexify_generator.rb" />
         <option value="$PROJECT_DIR$/lib/generators/templates/remexify_log.rb" />
         <option value="$PROJECT_DIR$/lib/generators/remexify_generator.rb" />
+        <option value="$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb" />
       </list>
     </option>
   </component>
@@ -397,18 +398,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/generators/templates/remexify_log.rb">
+    <entry file="file://$PROJECT_DIR$/lib/generators/remexify_generator.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-          <caret line="0" column="12" selection-start-line="0" selection-start-column="12" selection-end-line="0" selection-end-column="12" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="495">
+          <caret line="22" column="60" selection-start-line="22" selection-start-column="60" selection-end-line="22" selection-end-column="60" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/generators/remexify_generator.rb">
+    <entry file="file://$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="179" max-vertical-offset="495">
-          <caret line="18" column="52" selection-start-line="18" selection-start-column="52" selection-end-line="18" selection-end-column="52" />
+        <state vertical-scroll-proportion="0.6701031" vertical-offset="135" max-vertical-offset="555">
+          <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
           <folding />
         </state>
       </provider>
