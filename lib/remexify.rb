@@ -43,11 +43,23 @@ module Remexify
       options[:description] = options[:desc] if options[:desc]
       options[:description] ||= ""
 
+      # class name cannot be blank
+      class_name = options[:class]
+      class_name = Time.now.strftime("%Y%m%d") if class_name.blank?
+
+      # generate hash
+      hashed = "#{message}#{class_name}"
+      md5 = Digest::MD5.hexdigest hashed
+
+      # assure md5 is not yet exist, if exist, don't save
+      raise ActiveRecord::Rollback if System::Loggers.where(md5: md5).first
+
       config.model.create({
+         md5: md5,
          level: level,
          message: message,
          backtrace: backtrace,
-         class_name: options[:class],
+         class_name: class_name,
          method_name: options[:method],
          line: options[:line],
          file_name: options[:file],
