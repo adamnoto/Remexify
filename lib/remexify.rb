@@ -7,8 +7,10 @@ module Remexify
   WARNING = 200
   ERROR = 300
 
+  module_function
+
   # options = class, method, line, file, params/param/parameters, desc/description
-  def self.write(level, obj, options = {})
+  def write(level, obj, options = {})
     if (obj.is_a?(StandardError) || err.is_a?(RuntimeError)) && obj.already_logged
       return
     end
@@ -54,15 +56,16 @@ module Remexify
     nil # don't return anything for logging!
   end
 
-  def self.info(obj, options = {})
+
+  def info(obj, options = {})
     write INFO, obj, options
   end
 
-  def self.warning(obj, options = {})
+  def warning(obj, options = {})
     write WARNING, obj, options
   end
 
-  def self.error(obj, options = {})
+  def error(obj, options = {})
     write ERROR, obj, options
   end
 end
