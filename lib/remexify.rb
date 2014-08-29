@@ -63,7 +63,7 @@ module Remexify
           method_name: options[:method],
           line: options[:line],
           file_name: options[:file],
-          parameters: options[:parameters].inspect,
+          parameters: (options[:parameters].blank? ? "" : options[:parameters].inspect),
           description: options[:description]
         })
       end
