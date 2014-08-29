@@ -16,7 +16,7 @@ module Remexify
       end
 
       def copy_migration
-        # migration_template "remexify_log.rb", "db/migrate/remexify_log.rb"
+        migration_template "create_remexify_lognotes.rb", "db/migrate/create_remexify_lognotes.rb"
       end
 
       def generate_model

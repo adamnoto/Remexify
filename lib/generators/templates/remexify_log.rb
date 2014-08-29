@@ -1,4 +1,4 @@
-class RemexifyLog < ActiveRecord::Migration
+class CreateRemexifyLognotes < ActiveRecord::Migration
   def self.up
     create_table :remexify_lognotes do |t|
       # let your log unique
