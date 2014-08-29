@@ -1,0 +1,2 @@
+class DisplayableError < StandardError
+end

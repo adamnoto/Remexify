@@ -2,6 +2,7 @@ require "remexify/version"
 require "active_support/configurable"
 require "remexify/standard_error"
 require "remexify/runtime_error"
+require "remexify/displayable_error"
 
 module Remexify
   include ActiveSupport::Configurable
