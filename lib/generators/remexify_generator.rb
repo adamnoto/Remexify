@@ -11,6 +11,10 @@ module Remexify
 
       namespace "remexify"
 
+      def self.next_migration_number(path)
+        Time.now.utc.strftime("%Y%m%d%H%M%S")
+      end
+
       def copy_migration
         migration_template "remexify_log.rb", "db/migration/remexify_log.rb"
       end
