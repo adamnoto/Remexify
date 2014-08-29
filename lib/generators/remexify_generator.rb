@@ -21,7 +21,7 @@ module Remexify
       end
 
       def generate_model
-        invoke "active_record:model", [name], migration: false unless model_exists? && behavior == :invoke
+        invoke "active_record:model", [name], migration: false
         # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
       end
 

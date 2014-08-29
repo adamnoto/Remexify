@@ -38,8 +38,8 @@
           <file leaf-file-name="remexify_generator.rb" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/lib/generators/remexify_generator.rb">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.5143885" vertical-offset="277" max-vertical-offset="570">
-                  <caret line="28" column="75" selection-start-line="28" selection-start-column="75" selection-end-line="28" selection-end-column="75" />
+                <state vertical-scroll-proportion="0.24460432" vertical-offset="277" max-vertical-offset="570">
+                  <caret line="23" column="62" selection-start-line="23" selection-start-column="62" selection-end-line="23" selection-end-column="62" />
                   <folding />
                 </state>
               </provider>
@@ -83,7 +83,7 @@
             <entry file="file://$PROJECT_DIR$/lib/generators/remexify_generator.rb">
               <provider selected="true" editor-type-id="text-editor">
                 <state vertical-scroll-proportion="0.6703297" vertical-offset="162" max-vertical-offset="570">
-                  <caret line="23" column="106" selection-start-line="23" selection-start-column="106" selection-end-line="23" selection-end-column="106" />
+                  <caret line="23" column="62" selection-start-line="23" selection-start-column="62" selection-end-line="23" selection-end-column="62" />
                   <folding />
                 </state>
               </provider>
@@ -446,8 +446,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/generators/remexify_generator.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5143885" vertical-offset="277" max-vertical-offset="570">
-          <caret line="28" column="75" selection-start-line="28" selection-start-column="75" selection-end-line="28" selection-end-column="75" />
+        <state vertical-scroll-proportion="0.24460432" vertical-offset="277" max-vertical-offset="570">
+          <caret line="23" column="62" selection-start-line="23" selection-start-column="62" selection-end-line="23" selection-end-column="62" />
           <folding />
         </state>
       </provider>
