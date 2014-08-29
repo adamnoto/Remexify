@@ -53,21 +53,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="initialize_remexify.rb" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="initialize_remexify.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/generators/templates/initialize_remexify.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="613">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="90">
               <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="create_remexify_lognotes.rb" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="create_remexify_lognotes.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="555">
-              <caret line="28" column="35" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="35" />
+            <state vertical-scroll-proportion="0.04893964" vertical-offset="0" max-vertical-offset="613">
+              <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -89,11 +89,11 @@
         <option value="$PROJECT_DIR$/lib/generators/active_record/templates/remexify_log.rb" />
         <option value="$PROJECT_DIR$/lib/generators/active_record/remexify_generator.rb" />
         <option value="$PROJECT_DIR$/lib/generators/templates/remexify_log.rb" />
-        <option value="$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb" />
         <option value="$PROJECT_DIR$/lib/generators/remexify_generator.rb" />
         <option value="$PROJECT_DIR$/remexify.gemspec" />
         <option value="$PROJECT_DIR$/lib/remexify.rb" />
         <option value="$PROJECT_DIR$/lib/generators/templates/initialize_remexify.rb" />
+        <option value="$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb" />
       </list>
     </option>
   </component>
@@ -410,14 +410,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="555">
-          <caret line="28" column="35" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lib/remexify.rb">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="165">
@@ -430,6 +422,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="613">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/generators/templates/create_remexify_lognotes.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.04893964" vertical-offset="0" max-vertical-offset="613">
+          <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
           <folding />
         </state>
       </provider>
