@@ -1,6 +1,6 @@
 class CreateRemexifyLognotes < ActiveRecord::Migration
   def self.up
-    create_table :remexify_lognotes do |t|
+    create_table <%= table_name %> do |t|
       # let your log unique
       t.string :md5, null: false
 
@@ -20,13 +20,13 @@ class CreateRemexifyLognotes < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :remexify_lognotes, [:md5], unique: true
+    add_index :<%= table_name %>, [:md5], unique: true
   end
 
   def self.down
     # we don't want to make assumption of your roll back, please
     # by all mean edit it.
-    # drop_table :remexify_logs
+    # drop_table :<%= table_name %>
     raise ActiveRecord::IrreversibleMigration
   end
 end

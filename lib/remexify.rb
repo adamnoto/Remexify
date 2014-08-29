@@ -1,5 +1,10 @@
 require "remexify/version"
+require "gem_config"
 
 module Remexify
-  # Your code goes here...
+  include GemConfig::Base
+
+  with_configuration do
+    has :log_table_model, classes: String
+  end
 end

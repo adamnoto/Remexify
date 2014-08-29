@@ -1,13 +1,14 @@
 require "rails/generators"
 require "rails/generators/migration"
+require "rails/generators/named_base"
 
 module Remexify
   module Generators
-    class RemexifyGenerator < Rails::Generators::Base
+    class RemexifyGenerator < Rails::Generators::NamedBase
       include Rails::Generators::Migration
       source_root File.expand_path("../templates", __FILE__)
 
-      desc "Generates a model and database migration for remexify to log error/informations"
+      desc "Generates a model with the given NAME for remexify to log error/informations"
 
       namespace "remexify"
 
@@ -20,8 +21,12 @@ module Remexify
       end
 
       def generate_model
-        invoke "active_record:model", ["Remexify::Lognotes"], migration: false
+        invoke "active_record:model", [name], migration: false unless model_exists? && behavior == :invoke
         # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
+      end
+
+      def make_initializer
+        template "initialize_remexify.rb", "config/initializers/remexify.rb"
       end
     end
   end
