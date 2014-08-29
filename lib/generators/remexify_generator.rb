@@ -16,11 +16,12 @@ module Remexify
       end
 
       def copy_migration
-        migration_template "remexify_log.rb", "db/migrate/remexify_log.rb"
+        # migration_template "remexify_log.rb", "db/migrate/remexify_log.rb"
       end
 
       def generate_model
-        invoke "active_record:model", ["Remexify::Log"], migration: false
+        # invoke "active_record:model", ["Remexify::Logs"], migration: false
+        invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
       end
     end
   end
