@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "railties", ">= 3.2.6", "< 5"
   spec.add_development_dependency "rails", "> 3"
+  spec.add_development_dependency "activesupport"
 end
