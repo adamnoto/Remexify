@@ -7,6 +7,7 @@ module Remexify
   INFO = 100
   WARNING = 200
   ERROR = 300
+  FATAL = 600
 
   class << self
     def setup

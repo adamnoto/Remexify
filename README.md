@@ -136,3 +136,8 @@ timestamps | N/A | timestamp of the error when it was created, and last updated.
 5. Create a new Pull Request
 
 by Adam Pahlevi Baihaqi
+
+## History
+
+- v.1.0.0 Initial version. Supporting PostgreSQL and Rails 3/4 to log info/error/warning/user-defined error level.
+- v.1.1.0 User can configure censor strings array, which would delete trace if a trace contains the censored string. 

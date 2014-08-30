@@ -82,6 +82,10 @@ module Remexify
     def error(obj, options = {})
       write ERROR, obj, options
     end
+
+    def fatal(obj, options = {})
+      write FATAL, obj, options
+    end
   end
 
 end
