@@ -14,9 +14,9 @@ module Remexify
         # censor some text
         backtrace = obj.backtrace.clone
         # fool proof
-        if Remexify.config.cencor_strings.is_a?(Array)
+        if Remexify.config.censor_strings.is_a?(Array)
           Remexify.config.censor_strings.each do |str|
-            backtrace.reject! { |b| !(b =~ /str/).nil? }
+            backtrace.reject! { |b| !(b =~ /#{str}/).nil? }
           end
         end
         backtrace = obj.backtrace.join("\n")
