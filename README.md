@@ -62,7 +62,7 @@ In a rails app, you may invoke the `error()` like this:
       raise e
     end 
             
-Remexify have 3 static functions:
+Remexify have 4 static functions:
 
     def write(level, obj, options = {}); end;
     def info(obj, options = {}); end;
