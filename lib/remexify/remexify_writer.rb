@@ -19,6 +19,7 @@ module Remexify
             backtrace.reject! { |b| !((b =~ /#{str}/i).nil?) }
           end
         end
+        backtrace = backtrace.join("\n")
       elsif obj.class <= String
         message = obj
         backtrace = nil
