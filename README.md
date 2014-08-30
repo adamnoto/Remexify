@@ -5,7 +5,6 @@ record and access your logs anytime from your database.
 
 ## Behind the scene
 
-### Blockquotes
 > Roses are red violets are blue, a log is not a poem it should be accessible to you.
 
 In all the projects I am working on, I always have a database-backed logger. I am tired of managing
