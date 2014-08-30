@@ -15,6 +15,10 @@ module Remexify
         end
         return ar_statement.all.to_a
       end
+
+      def where_fingerprint_is(fingerprint)
+        Remexify.config.model.where(md5: fingerprint).first
+      end
     end
   end
 
