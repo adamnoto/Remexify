@@ -11,6 +11,7 @@ module Remexify
   class << self
     def setup
       config.model = nil
+      config.censor_strings = []
       yield config
     end
   end
