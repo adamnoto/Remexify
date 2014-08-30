@@ -9,7 +9,7 @@ module Remexify
       end
 
       def all_today(options = {})
-        ar_statement = Remexify.config.model.where(created_at: Time.now.beginning_of_day)
+        ar_statement = Remexify.config.model.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day)
         if options[:order]
           return ar_statement.order(options[:order]).all.to_a
         end
