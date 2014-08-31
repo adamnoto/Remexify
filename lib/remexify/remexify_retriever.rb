@@ -38,7 +38,7 @@ module Remexify
     def level(obj, options)
       lvl_option = options[:level]
       if lvl_option
-        lvl = lvl.gsub(/[^0-9]/, "")
+        lvl = lvl_option.gsub(/[^0-9]/, "")
         raise "Level must all be a number" if (lvl =~ /^[0-9]+$/).nil?
 
         if lvl =~ />=/
