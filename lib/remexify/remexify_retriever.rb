@@ -41,15 +41,15 @@ module Remexify
         lvl = lvl_option.gsub(/[^0-9]/, "")
         raise "Level must all be a number" if (lvl =~ /^[0-9]+$/).nil?
 
-        if lvl =~ />=/
+        if lvl_option =~ />=/
           obj = obj.where("level >= ?", lvl)
-        elsif lvl =~ /<=/
+        elsif lvl_option =~ /<=/
           obj = obj.where("level <= ?", lvl)
-        elsif lvl =~ />/
+        elsif lvl_option =~ />/
           obj = obj.where("level > ?", lvl)
-        elsif lvl =~ /</
+        elsif lvl_option =~ /</
           obj = obj.where("level < ?", lvl)
-        elsif lvl =~ /=/
+        elsif lvl_option =~ /=/
           obj = obj.where("level = ?", lvl)
         else
           raise "Unknown operator for level"
