@@ -79,8 +79,6 @@ module Remexify
            #{time_now}, #{time_now});
         SQL
         config.model.connection.commit_transaction
-        config.model.connection.reconnect!
-        config.model.connection.begin_db_transaction
       end
 
       # mark already logged if DisplayableError
