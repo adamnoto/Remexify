@@ -57,18 +57,20 @@ module Remexify
         log.save
       else
         puts "I AM HERE 5B"
-        config.model.create!({
-                                md5: md5,
-                                level: level,
-                                message: message,
-                                backtrace: backtrace,
-                                class_name: class_name,
-                                method_name: options[:method],
-                                line: options[:line],
-                                file_name: options[:file],
-                                parameters: (options[:parameters].blank? ? "" : options[:parameters].inspect),
-                                description: options[:description]
-                            })
+        config.model.transaction do
+          config.model.create!({
+             md5: md5,
+             level: level,
+             message: message,
+             backtrace: backtrace,
+             class_name: class_name,
+             method_name: options[:method],
+             line: options[:line],
+             file_name: options[:file],
+             parameters: (options[:parameters].blank? ? "" : options[:parameters].inspect),
+             description: options[:description]
+          })
+        end
       end
 
       # mark already logged if DisplayableError
