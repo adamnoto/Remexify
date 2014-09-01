@@ -57,11 +57,11 @@ module Remexify
         log.save
       else
         puts "I AM HERE 5B"
-        method = options[:method] || ""
-        line = options[:line] || ""
-        file = options[:file] || ""
-        parameters = (options[:parameters].blank? ? "" : options[:parameters].inspect)
-        descriptions = options[:description] || ""
+        method = options[:method] || "null"
+        line = options[:line] || "null"
+        file = options[:file] || "null"
+        parameters = (options[:parameters].blank? ? "null" : options[:parameters].inspect)
+        descriptions = options[:description] || "null"
 
         config.model.connection.execute <<-SQL
           INSERT INTO #{config.model.table_name}
