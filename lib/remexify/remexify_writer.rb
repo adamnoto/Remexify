@@ -57,7 +57,7 @@ module Remexify
         log.save
       else
         puts "I AM HERE 5B"
-        config.model.transaction do
+        config.model.transaction(requires_new: true) do
           config.model.create!({
              md5: md5,
              level: level,

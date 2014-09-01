@@ -76,8 +76,8 @@
       <file leaf-file-name="remexify_writer.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/remexify/remexify_writer.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.1861702" vertical-offset="810" max-vertical-offset="1620">
-              <caret line="61" column="12" selection-start-line="61" selection-start-column="12" selection-end-line="61" selection-end-column="12" />
+            <state vertical-scroll-proportion="0.13297872" vertical-offset="810" max-vertical-offset="1620">
+              <caret line="59" column="52" selection-start-line="59" selection-start-column="52" selection-end-line="59" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -899,8 +899,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/remexify/remexify_writer.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1861702" vertical-offset="810" max-vertical-offset="1620">
-          <caret line="61" column="12" selection-start-line="61" selection-start-column="12" selection-end-line="61" selection-end-column="12" />
+        <state vertical-scroll-proportion="0.13297872" vertical-offset="810" max-vertical-offset="1620">
+          <caret line="59" column="52" selection-start-line="59" selection-start-column="52" selection-end-line="59" selection-end-column="52" />
           <folding />
         </state>
       </provider>
