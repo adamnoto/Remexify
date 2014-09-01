@@ -24,7 +24,7 @@ module Remexify
         backtrace = backtrace.join("\n")
       elsif obj.class <= String
         message = obj
-        backtrace = nil
+        backtrace = ""
       end
 
       puts "I AM HERE 3"
@@ -57,20 +57,21 @@ module Remexify
         log.save
       else
         puts "I AM HERE 5B"
-        config.model.transaction(requires_new: true) do
-          config.model.create!({
-             md5: md5,
-             level: level,
-             message: message,
-             backtrace: backtrace,
-             class_name: class_name,
-             method_name: options[:method],
-             line: options[:line],
-             file_name: options[:file],
-             parameters: (options[:parameters].blank? ? "" : options[:parameters].inspect),
-             description: options[:description]
-          })
-        end
+        method = options[:method] || ""
+        line = options[:line] || ""
+        file = options[:file] || ""
+        parameters = (options[:parameters].blank? ? "" : options[:parameters].inspect)
+        descriptions = options[:description] || ""
+
+        config.model.execute <<-SQL
+          INSERT INTO #{config.model} (md5, level, message, backtrace,
+                                       class_name, method_name, line, file_name,
+                                       parameters, description, created_at, updated_at)
+          VALUES ("#{md5}", #{Integer level}, "#{message}", "#{backtrace || ""}", "#{class_name}",
+                  "#{method}", "#{line}", "#{file}", "#{parameters}", "#{descriptions}",
+                  "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}",
+                  "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}")
+        SQL
       end
 
       # mark already logged if DisplayableError
