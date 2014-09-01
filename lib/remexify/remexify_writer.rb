@@ -68,7 +68,9 @@ module Remexify
         time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M;%S"))
 
         puts "I AM CALLED AGAIN"
-        config.model.connection.rollback_transaction
+        if config.model.connection.transaction_open?
+          config.model.connection.rollback_transaction
+        end
         config.model.connection.begin_transaction
         config.model.connection.execute <<-SQL
           INSERT INTO #{config.model.table_name} (
