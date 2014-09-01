@@ -69,9 +69,10 @@ module Remexify
                                        class_name, method_name, line, file_name,
                                        parameters, description, created_at, updated_at)
           VALUES ("#{md5}", #{Integer level}, "#{message}", "#{backtrace || ""}", "#{class_name}",
-                  "#{method}", "#{line}", "#{file}", "#{parameters}", "#{descriptions}",
+                  #{method}, #{line}, #{file}, "#{parameters}", #{descriptions},
                   "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}",
-                  "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}")
+                  "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}");
+          COMMIT;
         SQL
       end
 
