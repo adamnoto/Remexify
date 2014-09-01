@@ -31,8 +31,9 @@ module Remexify
       options[:parameters] = options[:parameter] if options[:parameter]
       options[:parameters] ||= ""
 
-      if options[:extract_params_for]
-        ar_object = options[:extract_params_for]
+      # will override the options[:parameters] if this block execute successfully
+      if options[:extract_params_from]
+        ar_object = options[:extract_params_from]
         if ar_object.class < ActiveRecord::Base
           if ar_object.respond_to?(:attribute_names) && ar_object.respond_to?(:read_attribute)
             ar_attributes = ar_object.attribute_names
@@ -40,6 +41,7 @@ module Remexify
             ar_attributes.each do |attr|
               attributes[attr.to_s] = ar_object.read_attribute attr.to_sym
             end
+            options[:parameters] = attributes
           end
         end
       end
