@@ -2,11 +2,9 @@ module Remexify
   class << self
     # options = class, method, line, file, params/param/parameters, desc/description
     def write(level, obj, options = {})
-      puts "I AM HERE 1"
       if (obj.is_a?(StandardError) || obj.is_a?(RuntimeError)) && obj.already_logged
         return
       end
-      puts "I AM HERE 2"
 
       message = "message is nil"
       backtrace = "backtrace is nil"
@@ -27,8 +25,6 @@ module Remexify
         backtrace = ""
       end
 
-      puts "I AM HERE 3"
-
       # standardize into options[:parameters]
       options[:parameters] = options[:param] if options[:param]
       options[:parameters] = options[:params] if options[:params]
@@ -47,12 +43,9 @@ module Remexify
       hashed = "#{message}#{class_name}"
       md5 = Digest::MD5.hexdigest hashed
 
-      puts "I AM HERE 4"
-
       # assure md5 is not yet exist, if exist, don't save
       log = config.model.where(md5: md5).first
       if log
-        puts "I AM HERE 5A"
         log.frequency += 1
         log.save
       else
@@ -65,9 +58,8 @@ module Remexify
         file = options[:file].blank? ? "null" : config.model.connection.quote(options[:file])
         parameters = options[:parameters].blank? ? "null" : config.model.connection.quote(options[:parameters].inspect)
         descriptions = options[:description].blank? ? "null" : config.model.connection.quote(options[:description])
-        time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M;%S"))
+        time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M:%S"))
 
-        puts "I AM CALLED AGAIN"
         if config.model.connection.transaction_open?
           config.model.connection.rollback_transaction
         end
@@ -88,8 +80,6 @@ module Remexify
       if obj.is_a?(StandardError) || obj.is_a?(DisplayableError)
         obj.already_logged = true
       end
-
-      puts "I AM HERE 6"
 
       nil # don't return anything for logging!
     end
