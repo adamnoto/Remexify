@@ -57,7 +57,7 @@ module Remexify
         log.save
       else
         puts "I AM HERE 5B"
-        config.model.create({
+        config.model.create!({
                                 md5: md5,
                                 level: level,
                                 message: message,
