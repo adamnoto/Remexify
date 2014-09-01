@@ -31,6 +31,19 @@ module Remexify
       options[:parameters] = options[:parameter] if options[:parameter]
       options[:parameters] ||= ""
 
+      if options[:extract_params_for]
+        ar_object = options[:extract_params_for]
+        if ar_object.class < ActiveRecord::Base
+          if ar_object.respond_to?(:attribute_names) && ar_object.respond_to?(:read_attribute)
+            ar_attributes = ar_object.attribute_names
+            attributes = {}
+            ar_attributes.each do |attr|
+              attributes[attr.to_s] = ar_object.read_attribute attr.to_sym
+            end
+          end
+        end
+      end
+
       # standardize into options[:description]
       options[:description] = options[:desc] if options[:desc]
       options[:description] ||= ""
