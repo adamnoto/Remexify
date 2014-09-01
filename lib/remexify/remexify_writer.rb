@@ -56,22 +56,25 @@ module Remexify
         log.frequency += 1
         log.save
       else
-        puts "I AM HERE 5B"
-        method = options[:method].blank? ? "null" : %Q{"#{options[:method]}"}
-        line = options[:line].blank? ? "null" : %Q{"#{options[:line]}"}
-        file = options[:file].blank? ? "null" : %Q{"#{options[:file]}"}
-        parameters = options[:parameters].blank? ? "null" : %Q{"#{options[:parameters].inspect}"}
-        descriptions = options[:description].blank? ? "null" : %Q{"#{options[:description]}"}
+        md5 = config.model.connection.quote md5
+        message = config.model.connection.quote message
+        backtrace = backtrace.blank? ? "null" : config.model.connection.quote(backtrace)
+        class_name = config.model.connection.quote(class_name)
+        method = options[:method].blank? ? "null" : config.model.connection.quote(options[:method])
+        line = options[:line].blank? ? "null" : config.model.connection.quote(options[:line])
+        file = options[:file].blank? ? "null" : config.model.connection.quote(options[:file])
+        parameters = options[:parameters].blank? ? "null" : config.model.connection.quote(options[:parameters].inspect)
+        descriptions = options[:description].blank? ? "null" : config.model.connection.quote(options[:description])
+        time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M;%S"))
 
         config.model.connection.execute <<-SQL
-          INSERT INTO #{config.model.table_name}
-                                       (md5, level, message, backtrace,
-                                       class_name, method_name, line, file_name,
-                                       parameters, description, created_at, updated_at)
-          VALUES ("#{md5}", #{Integer level}, "#{message}", "#{backtrace || ""}", "#{class_name}",
-                  #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
-                  "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}",
-                  "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}");
+          INSERT INTO #{config.model.table_name} (
+           md5, level, message, backtrace,
+           class_name, method_name, line, file_name,
+           parameters, description, created_at, updated_at)
+          VALUES (#{md5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
+           #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
+           #{time_now}, #{time_now});
           COMMIT;
         SQL
       end
