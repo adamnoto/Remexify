@@ -68,8 +68,8 @@ module Remexify
         time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M;%S"))
 
         config.model.connection.rollback_transaction
-        config.model.connection.begin_transaction
-        config.model.connection.execute <<-SQL
+        config.model.connection.begin_transaction do
+          config.model.connection.execute <<-SQL
           INSERT INTO #{config.model.table_name} (
            md5, level, message, backtrace,
            class_name, method_name, line, file_name,
@@ -77,8 +77,8 @@ module Remexify
           VALUES (#{md5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
            #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
            #{time_now}, #{time_now});
-          COMMIT;
-        SQL
+          SQL
+        end
         config.model.connection.commit_transaction
       end
 
