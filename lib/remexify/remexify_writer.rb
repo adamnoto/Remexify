@@ -57,11 +57,11 @@ module Remexify
         log.save
       else
         puts "I AM HERE 5B"
-        method = options[:method] || "null"
-        line = options[:line] || "null"
-        file = options[:file] || "null"
-        parameters = (options[:parameters].blank? ? "null" : options[:parameters].inspect)
-        descriptions = options[:description] || "null"
+        method = options[:method].blank? ? "null" : %Q{"#{options[:method]}"}
+        line = options[:line].blank? ? "null" : %Q{"#{options[:line]}"}
+        file = options[:file].blank? ? "null" : %Q{"#{options[:file]}"}
+        parameters = options[:parameters].blank? ? "null" : %Q{"#{options[:parameters].inspect}"}
+        descriptions = options[:description].blank? ? "null" : %Q{"#{options[:description]}"}
 
         config.model.connection.execute <<-SQL
           INSERT INTO #{config.model.table_name}
@@ -69,7 +69,7 @@ module Remexify
                                        class_name, method_name, line, file_name,
                                        parameters, description, created_at, updated_at)
           VALUES ("#{md5}", #{Integer level}, "#{message}", "#{backtrace || ""}", "#{class_name}",
-                  #{method}, #{line}, #{file}, "#{parameters}", #{descriptions},
+                  #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
                   "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}",
                   "#{Time.now.strftime("%Y-%m-%d %H:%M:%S")}");
           COMMIT;
