@@ -64,7 +64,8 @@ module Remexify
         descriptions = options[:description] || ""
 
         config.model.connection.execute <<-SQL
-          INSERT INTO #{config.model} (md5, level, message, backtrace,
+          INSERT INTO #{config.model.table_name}
+                                       (md5, level, message, backtrace,
                                        class_name, method_name, line, file_name,
                                        parameters, description, created_at, updated_at)
           VALUES ("#{md5}", #{Integer level}, "#{message}", "#{backtrace || ""}", "#{class_name}",
