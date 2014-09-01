@@ -77,6 +77,7 @@ module Remexify
            #{time_now}, #{time_now});
           COMMIT;
         SQL
+        config.model.connection.commit_transaction
       end
 
       # mark already logged if DisplayableError
