@@ -67,6 +67,7 @@ module Remexify
         descriptions = options[:description].blank? ? "null" : config.model.connection.quote(options[:description])
         time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M;%S"))
 
+        puts "I AM CALLED AGAIN"
         config.model.connection.rollback_transaction
         config.model.connection.begin_transaction
         config.model.connection.execute <<-SQL
