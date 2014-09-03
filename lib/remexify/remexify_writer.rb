@@ -1,18 +1,19 @@
 module Remexify
   class << self
     # options = class, method, line, file, params/param/parameters, desc/description
-    def write(level, obj, options = {})
-      if (obj.is_a?(StandardError) || obj.is_a?(RuntimeError)) && obj.already_logged
+    # extract_params_from, object
+    def write(level, message_object, options = {})
+      if (message_object.is_a?(StandardError) || message_object.is_a?(RuntimeError)) && message_object.already_logged
         return
       end
 
       message = "message is nil"
       backtrace = "backtrace is nil"
 
-      if obj.class <= Exception
-        message = obj.message
+      if message_object.class <= Exception
+        message = message_object.message
         # censor some text
-        backtrace = obj.backtrace.clone
+        backtrace = message_object.backtrace.clone
         # fool proof
         if Remexify.config.censor_strings.is_a?(Array)
           Remexify.config.censor_strings.each do |str|
@@ -20,8 +21,8 @@ module Remexify
           end
         end
         backtrace = backtrace.join("\n")
-      elsif obj.class <= String
-        message = obj
+      elsif message_object.class <= String
+        message = message_object
         backtrace = ""
       end
 
@@ -33,16 +34,25 @@ module Remexify
 
       # will override the options[:parameters] if this block execute successfully
       if options[:extract_params_from]
-        ar_object = options[:extract_params_from]
-        if ar_object.class < ActiveRecord::Base
-          if ar_object.respond_to?(:attribute_names) && ar_object.respond_to?(:read_attribute)
-            ar_attributes = ar_object.attribute_names
+        ar_message_objectect = options[:extract_params_from]
+        if ar_message_objectect.class < ActiveRecord::Base
+          if ar_message_objectect.respond_to?(:attribute_names) && ar_message_objectect.respond_to?(:read_attribute)
+            ar_attributes = ar_message_objectect.attribute_names
             attributes = {}
             ar_attributes.each do |attr|
-              attributes[attr.to_s] = ar_object.read_attribute attr.to_sym
+              attributes[attr.to_s] = ar_message_objectect.read_attribute attr.to_sym
             end
             options[:parameters] = attributes
           end
+        end
+      end
+
+      # if object is given
+      if options[:object]
+        # and is an active record
+        if options[:object].class < ActiveRecord::Base
+          # append to message
+          message << "\n\nActiveRecord error messages:\n" << options[:object].errors.full_messages.join("\n")
         end
       end
 
@@ -92,27 +102,27 @@ module Remexify
       end
 
       # mark already logged if DisplayableError
-      if obj.is_a?(StandardError) || obj.is_a?(DisplayableError)
-        obj.already_logged = true
+      if message_object.is_a?(StandardError) || message_object.is_a?(DisplayableError)
+        message_object.already_logged = true
       end
 
       nil # don't return anything for logging!
     end
 
-    def info(obj, options = {})
-      write INFO, obj, options
+    def info(message_object, options = {})
+      write INFO, message_object, options
     end
 
-    def warning(obj, options = {})
-      write WARNING, obj, options
+    def warning(message_object, options = {})
+      write WARNING, message_object, options
     end
 
-    def error(obj, options = {})
-      write ERROR, obj, options
+    def error(message_object, options = {})
+      write ERROR, message_object, options
     end
 
-    def fatal(obj, options = {})
-      write FATAL, obj, options
+    def fatal(message_object, options = {})
+      write FATAL, message_object, options
     end
   end
 
