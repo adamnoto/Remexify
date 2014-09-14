@@ -1,3 +1,5 @@
+$cached_error = []
+
 module Remexify
   class << self
     # options = class, method, line, file, params/param/parameters, desc/description

@@ -26,7 +26,7 @@ module Remexify
       end
 
       def make_initializer
-        template "initialize_remexify.rb", "config/initializers/remexify.rb"
+        template "initialize_remexify.rb", "config/initializers/00_remexify.rb"
       end
     end
   end
