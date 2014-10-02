@@ -140,7 +140,7 @@ by Adam Pahlevi Baihaqi
 ## History
 
 - v.1.0.0 Initial version. Supporting PostgreSQL and Rails 3/4 to log info/error/warning/user-defined error level.
-- v.1.1.0 
+- [v.1.1.0](http://universitas-utara.herokuapp.com/post/34-rilis_remexify_1_1_0) 
   - User can configure `censor_strings`, which would delete trace if its string contains one of the censored string.
   - Adding the level options, which would allow retriever to retrieve `all`/`today` log of certain level.
   - Increased accuracy: Error that occurred more than one time that involve unprintable object that have memory address, will have its memory address stripped only to display the class information.
