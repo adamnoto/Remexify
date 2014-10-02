@@ -16,7 +16,6 @@ module Remexify
         message = message_object.message
         # censor some text
         backtrace = message_object.backtrace.clone
-        # fool proof
         if Remexify.config.censor_strings.is_a?(Array)
           Remexify.config.censor_strings.each do |str|
             backtrace.reject! { |b| !((b =~ /#{str}/i).nil?) }
@@ -67,6 +66,9 @@ module Remexify
       class_name = Time.now.strftime("%Y%m%d") if class_name.blank?
 
       # generate hash
+      # strip hex from class in order to increase accuracy of logged error, if any;
+      # so: #<#<Class:0x007f9492c00430>:0x007f9434ccab> will just be #<#<Class>>
+      message = message.gsub(/:0x[0-9a-fA-F]+/i, "")
       hashed = "#{message}#{class_name}"
       md5 = Digest::MD5.hexdigest hashed
 
