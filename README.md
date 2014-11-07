@@ -1,14 +1,24 @@
 # Remexify
 
-Remexify is a simple, opinionated Ruby on Rails gem to write logs to your database. No fluff and to the point,
-record and access your logs anytime from your database.
+Remexify is probably the world's simplest Rails-only gem to write logs into your database's table. It takes care of your
+everyday logging mechanism, but yet is not a dictator enough to make you lose control. No fluff, and to-the-point!
 
 ## Behind the scene
 
 > Roses are red violets are blue, a log is not a poem it should be accessible to you.
 
-In all the projects I am working on, I always have a database-backed logger. I am tired of managing
-all of those, but should-be identical logger. So, this gem really helped in.
+Remexify is always by my side whenever I need to log something into the database. I am tired of managing different logger,
+or duplicate codes accross multitude of projects I am working on.
+
+## Why should you use Remexify?
+
+1. Remexify help you log to your own database, by giving you the control and ease on when/where to do that.
+2. Remexify let you *censor* specific error classes which you don't want it to appear in the backtrace.
+3. Remexify let you define acceptable/unacceptable classes of error which you can use to control what instance of exception class you want to dismiss, or to keep.
+4. Remexify logs similar error once, but will record the frequency if similar error occurred again.
+5. Remexify let you log not only an error, but also info, log, etc. Actually, "error" is just a numeric constant.
+6. Remexify gives you the flexible means of accessing your logged error.
+7. Remexify is free and open source for all the People of Earth.
 
 ## Installation
 
@@ -127,6 +137,52 @@ description | :desc | programmer may pass in additional description here
 frequency | N/A | how many times `Remexify` encounter this error?
 timestamps | N/A | timestamp of the error when it was created, and last updated.
 
+## Define what errors to keep and what to dismiss.
+
+Sometimes, you don't want an error to be logged. In certain cases, an error is not supposed to be logged. In other cases,
+a specific logic is applied to acceptable, harmless specific error rather than poluting the database. 
+
+I afraid you think that I encourage the use of error for control statement. Not at all. Consider this given scenario:
+
+> You are designing an API which will be executed by a thread in a time you cannot be sure when, in other words: asynchronously.
+> In some point of time, you expect that your class can raise a harmless exception. This exception is indeed an error,
+> but is merely to indicate to the user that they cannot do certain action. Therefore, the error raised will be noticeable
+> but the parent class and in turn, by Remexify. You wish not to log this error, because you don't want your database 
+> to be polluted with this kind of harmless, acceptable, normal error. Some error that not causing headcache, some error
+> that is not a bug. But the one you cannot control, because it is asynchronous. You decided to log information about
+> this error in a row in your database, that the un-asynchronous caller can check regularly to see if the row is indicated
+> as erroneous. And then, the end user can be notified of their erroneous action.
+
+So, how could you do this? It's easy, use either:
+
+1. `discarded_exceptions` to enlist explicitly class of exception you don't want to log.
+2. `accepted_exceptions` to enlist those that Remexify will log.
+
+Practically, if you want to log any error but specific exception, then during initialisation you define:
+
+```ruby
+Remexify.setup do |config|
+  # other codes above
+  config.discarded_exceptions = [
+    ErrorToIgnore
+  ]
+end
+```
+
+However, if you want to command Remexify to log error only the one you have given it rights to, you do define:
+
+```ruby
+Remexify.setup do |config|
+  config.accepted_exceptions = [
+    String,
+    SpecificError
+  ]
+end
+```
+
+As simply as that, however, be informed that `discarded_exceptions` takes precedence. So, if you define a class as being both
+discarded and accepted, it will certainly be discarded. As simply as that, as always.
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/remexify/fork )
@@ -144,3 +200,6 @@ by Adam Pahlevi Baihaqi
   - User can configure `censor_strings`, which would delete trace if its string contains one of the censored string.
   - Adding the level options, which would allow retriever to retrieve `all`/`today` log of certain level.
   - Increased accuracy: Error that occurred more than one time that involve unprintable object that have memory address, will have its memory address stripped only to display the class information.
+- [v.1.2.0](#)
+  - User can configure `accepted_exceptions`
+  - User can configure `discarded_exceptions`

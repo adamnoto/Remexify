@@ -6,6 +6,18 @@ module Remexify
     # extract_params_from, object
     def write(level, message_object, options = {})
       if (message_object.is_a?(StandardError) || message_object.is_a?(RuntimeError)) && message_object.already_logged
+        # do not log exception that has been logged
+        return
+      end
+
+      if Remexify.config.discarded_exceptions.include? message_object.class
+        # do not log exception that is explicitly discarded
+        return
+      end
+
+      if Remexify.config.accepted_exceptions.any? && !Remexify.config.accepted_exceptions.include?(message_object.class)
+        # do not log exception when accepted_exceptions has member and that, the class of the message_object
+        # is not one of the member of the accepted exceptions
         return
       end
 
