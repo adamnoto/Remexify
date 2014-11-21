@@ -25,10 +25,13 @@ module Remexify
         migration_template "create_remexify_logowners.rb", "db/migrate/create_remexify_logowners.rb"
       end
 
-      def generate_model
+      def generate_lognotes_model
         invoke "active_record:model", [name], migration: false
+      end
+
+      # invoke is thor, it can only "invoke" once. so put an invoke in a separate function
+      def generate_logowners_model
         invoke "active_record:model", ["#{name}Owners"], migration: false
-        # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
       end
 
       def make_initializer
