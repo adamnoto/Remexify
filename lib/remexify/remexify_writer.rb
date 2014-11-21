@@ -3,7 +3,7 @@ $cached_error = []
 module Remexify
   class << self
     # options = class, method, line, file, params/param/parameters, desc/description
-    # extract_params_from, object
+    # extract_params_from, object, owned_by
     def write(level, message_object, options = {})
       if (message_object.is_a?(StandardError) || message_object.is_a?(RuntimeError)) && message_object.already_logged
         # do not log exception that has been logged
@@ -94,9 +94,22 @@ module Remexify
         message = config.model.connection.quote message
         backtrace = backtrace.blank? ? "null" : config.model.connection.quote(backtrace)
         class_name = config.model.connection.quote(class_name)
-        method = options[:method].blank? ? "null" : config.model.connection.quote(options[:method])
-        line = options[:line].blank? ? "null" : config.model.connection.quote(options[:line])
-        file = options[:file].blank? ? "null" : config.model.connection.quote(options[:file])
+
+        method = line = file = "null"
+        if Kernel.respond_to? :caller_locations
+          _caller = Kernel.caller_locations(1, 1)[0]
+          method = options[:method].blank? ? _caller.base_label : options.fetch(:method)
+          line = options[:line].blank? ? _caller.lineno : options.fetch(:lineno)
+          file = options[:file].blank? ? _caller.absolute_path : options.fetch(:file)
+        else
+          method = options[:method] unless options[:method].blank?
+          line = options[:line] unless options[:line].blank?
+          file = options[:file] unless options[:file].blank?
+        end
+        method = config.model.connection.quote(method)
+        line = config.model.connection.quote(line)
+        file = config.model.connection.quote(file)
+
         parameters = options[:parameters].blank? ? "null" : config.model.connection.quote(options[:parameters].inspect)
         descriptions = options[:description].blank? ? "null" : config.model.connection.quote(options[:description])
         time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M:%S"))
@@ -120,6 +133,18 @@ module Remexify
       # mark already logged if DisplayableError
       if message_object.is_a?(StandardError) || message_object.is_a?(DisplayableError)
         message_object.already_logged = true
+      end
+
+      # if owner_by is given, associate this log to the owned_by user
+      unless options[:owned_by].blank?
+        owned_by = config.model.connection.quote(options[:owned_by])
+        config.model.connection.begin_transaction
+        config.model.connection.execute <<-SQL
+          INSERT INTO #{config.model_owner.table_name} (
+           log_md5, identifier_id
+          ) VALUES (#{md5}, #{owned_by})
+        SQL
+        config.model.connection.commit_transaction
       end
 
       nil # don't return anything for logging!

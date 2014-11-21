@@ -13,6 +13,8 @@ module Remexify
     def setup
       # initialisation
       config.model = nil
+      config.model_owner = nil
+
       config.censor_strings = []
 
       # do not log exception of which class is listed.

@@ -4,17 +4,18 @@ module Remexify
   module Retrieve
     class << self
       def all(options = {})
-        logs = Remexify.config.model.all
-        logs = Remexify::Retrieve::Filter.instance.order logs, options
-        logs = Remexify::Retrieve::Filter.instance.level logs, options
+        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by options
+        logs = Remexify::Retrieve::Filter.order logs, options
+        logs = Remexify::Retrieve::Filter.level logs, options
 
         logs.to_a
       end
 
       def today(options = {})
-        logs = Remexify.config.model.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day).all
-        logs = Remexify::Retrieve::Filter.instance.order logs, options
-        logs = Remexify::Retrieve::Filter.instance.level logs, options
+        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by options
+        logs = logs.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day)
+        logs = Remexify::Retrieve::Filter.order logs, options
+        logs = Remexify::Retrieve::Filter.level logs, options
 
         logs.to_a
       end
@@ -25,8 +26,9 @@ module Remexify
     end
   end
 
-  class Remexify::Retrieve::Filter
-    include Singleton
+  module Remexify::Retrieve::Filter
+
+    module_function
 
     def order(obj, options)
       if options[:order]
@@ -56,6 +58,12 @@ module Remexify
         end
       end
       obj
+    end
+
+    def owned_by(options)
+      owned_logs = Remexify.config.model_owner.where(identifier_id: options.fetch(:owned_by))
+      owned_logs.map! { |ol| Remexify.config.model.where(md5: ol.log_md5).first! }
+      owned_logs
     end
   end
 

@@ -203,3 +203,4 @@ by Adam Pahlevi Baihaqi
 - [v.1.2.0](#)
   - User can configure `accepted_exceptions`
   - User can configure `discarded_exceptions`
+  - Ability to associate log to specific user
