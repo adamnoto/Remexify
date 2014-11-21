@@ -12,8 +12,12 @@ module Remexify
 
       namespace "remexify"
 
+      # to avoid next migration numbers having the same exact identity
+      @secondth = 1
+
       def self.next_migration_number(path)
-        Time.now.utc.strftime("%Y%m%d%H%M%S")
+        @secondth += 1
+        (Time.now.utc. + @secondth).strftime("%Y%m%d%H%M%S")
       end
 
       def copy_migration
@@ -22,8 +26,8 @@ module Remexify
       end
 
       def generate_model
-        invoke "active_record:model", ["#{name}Owners"], migration: false
         invoke "active_record:model", [name], migration: false
+        invoke "active_record:model", ["#{name}Owners"], migration: false
         # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
       end
 
