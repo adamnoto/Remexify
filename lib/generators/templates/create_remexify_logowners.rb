@@ -1,6 +1,6 @@
 class CreateRemexifyLogowner < ActiveRecord::Migration
   def self.up
-    create_table :<%= table_name %>_owner do |t|
+    create_table :<%= singular_table_name %>_owners do |t|
       t.string :log_md5, null: false
       t.integer :identifier_id, null: false
     end
