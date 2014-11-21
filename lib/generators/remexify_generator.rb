@@ -27,8 +27,8 @@ module Remexify
 
       def generate_model
         # don't just call invoke without Rails::Generators because Thor task only run once.
-        Rails::Generators.invoke "active_record:model", [name], migration: false
-        Rails::Generators.invoke "active_record:model", ["#{name}Owners"], migration: false
+        Rails::Generators.invoke "active_record:model", [name, "--no-migration"]
+        Rails::Generators.invoke "active_record:model", ["#{name}Owners", "--no-migration"]
         # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
       end
 
