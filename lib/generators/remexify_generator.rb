@@ -22,6 +22,7 @@ module Remexify
       end
 
       def generate_model
+        puts "#{name}Owners"
         invoke "active_record:model", [name], migration: false
         invoke "active_record:model", ["#{name}Owners"], migration: false
         # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
