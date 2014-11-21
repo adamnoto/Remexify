@@ -4,7 +4,7 @@ module Remexify
   module Retrieve
     class << self
       def all(options = {})
-        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by options
+        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by(options)
         logs = Remexify::Retrieve::Filter.order logs, options
         logs = Remexify::Retrieve::Filter.level logs, options
 
@@ -12,7 +12,7 @@ module Remexify
       end
 
       def today(options = {})
-        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by options
+        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by(options)
         logs = logs.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day)
         logs = Remexify::Retrieve::Filter.order logs, options
         logs = Remexify::Retrieve::Filter.level logs, options
