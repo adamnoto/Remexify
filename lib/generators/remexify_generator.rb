@@ -18,10 +18,12 @@ module Remexify
 
       def copy_migration
         migration_template "create_remexify_lognotes.rb", "db/migrate/create_remexify_lognotes.rb"
+        migration_template "create_remexify_logowners.rb", "db/migrate/create_remexify_logowners.rb"
       end
 
       def generate_model
         invoke "active_record:model", [name], migration: false
+        invoke "active_record:model", ["#{name}Owner"], migration: false
         # invoke "active_record:model", ["Remexify::Logs", "md5:string"], {migration: true, timestamps: true}
       end
 
