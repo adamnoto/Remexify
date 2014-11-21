@@ -4,7 +4,7 @@ class CreateRemexifyLogowner < ActiveRecord::Migration
       t.string :log_md5, null: false
       t.integer :identifier_id, null: false
     end
-    add_index :<%= table_name %>_owner, [:log_md5, :identifier_id], unique: true
+    add_index :<%= table_name %>_owners, [:log_md5, :identifier_id], unique: true
   end
 
   def self.down
