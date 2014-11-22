@@ -97,7 +97,7 @@ module Remexify
 
         method = line = file = "null"
         if Kernel.respond_to? :caller_locations
-          _caller = Kernel.caller_locations(1, 1)[0]
+          _caller = Kernel.caller_locations(2, 1)[0]
           method = options[:method].blank? ? _caller.base_label : options.fetch(:method)
           line = options[:line].blank? ? _caller.lineno : options.fetch(:lineno)
           file = options[:file].blank? ? _caller.absolute_path : options.fetch(:file)
