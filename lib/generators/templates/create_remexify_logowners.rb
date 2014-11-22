@@ -1,4 +1,4 @@
-class CreateRemexifyLogowner < ActiveRecord::Migration
+class CreateRemexifyLogowners < ActiveRecord::Migration
   def self.up
     create_table :<%= table_name %>_owners do |t|
       t.string :log_md5, null: false
