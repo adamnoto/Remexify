@@ -97,6 +97,7 @@ module Remexify
 
         method = line = file = "null"
         if Kernel.respond_to? :caller_locations
+          # 2, 1 is the original caller, 2 is the method write() that is called in this very class.
           _caller = Kernel.caller_locations(2, 1)[0]
           method = options[:method].blank? ? _caller.base_label : options.fetch(:method)
           line = options[:line].blank? ? _caller.lineno : options.fetch(:lineno)
@@ -136,7 +137,7 @@ module Remexify
       end
 
       # if owner_by is given, associate this log to the owned_by user
-      unless options[:owned_by].blank?
+      unless options[:owned_by].blank? && (config.model_owner < ActiveRecord::Base)
         owned_by = config.model.connection.quote(options[:owned_by])
         config.model.connection.begin_transaction
         config.model.connection.execute <<-SQL

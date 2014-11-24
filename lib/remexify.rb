@@ -10,7 +10,11 @@ module Remexify
   FATAL = 600
 
   class << self
+    attr_reader :setup_is_called
+
     def setup
+      raise "Remexify: do not call setup the second time, use Remexify.config to modify changes if that cannot be made during setup phase"
+
       # initialisation
       config.model = nil
       config.model_owner = nil
@@ -24,12 +28,15 @@ module Remexify
       config.accepted_exceptions = []
 
       yield config
+      @setup_is_called = true
 
       # warning if accepted_exceptions is defined but String is not included
       if config.accepted_exceptions.any? && !config.accepted_exceptions.include?(String)
         puts "REMEXIFY: You won't be able to log a String, because it is left out while you defined the `accepted_exceptions'"
       end
 
+      # model must exists as ActiveRecord model. model_owner is not necessary to exists at all
+      raise "Remexify.config.model is not an ActiveRecord model" if config.model < ActiveRecord::Base
     end
   end
 
