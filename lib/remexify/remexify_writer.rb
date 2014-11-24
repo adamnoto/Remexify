@@ -137,7 +137,7 @@ module Remexify
       end
 
       # if owner_by is given, associate this log to the owned_by user
-      unless options[:owned_by].blank? && (config.model_owner < ActiveRecord::Base)
+      if !options[:owned_by].blank? && (config.model_owner < ActiveRecord::Base)
         owned_by = config.model.connection.quote(options[:owned_by])
         config.model.connection.begin_transaction
         config.model.connection.execute <<-SQL

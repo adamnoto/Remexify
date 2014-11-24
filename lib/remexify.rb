@@ -36,7 +36,7 @@ module Remexify
       end
 
       # model must exists as ActiveRecord model. model_owner is not necessary to exists at all
-      raise "Remexify.config.model is not an ActiveRecord model" if config.model < ActiveRecord::Base
+      raise "Remexify.config.model is not an ActiveRecord model" unless config.model < ActiveRecord::Base
     end
   end
 
