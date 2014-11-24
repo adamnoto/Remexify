@@ -100,7 +100,7 @@ module Remexify
           # 2, 1 is the original caller, 2 is the method write() that is called in this very class.
           _caller = Kernel.caller_locations(2, 1)[0]
           method = options[:method].blank? ? _caller.base_label : options.fetch(:method)
-          line = options[:line].blank? ? _caller.lineno : options.fetch(:lineno)
+          line = options[:line].blank? ? _caller.lineno : options.fetch(:line)
           file = options[:file].blank? ? _caller.absolute_path : options.fetch(:file)
         else
           method = options[:method] unless options[:method].blank?
