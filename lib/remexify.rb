@@ -10,10 +10,10 @@ module Remexify
   FATAL = 600
 
   class << self
-    attr_reader :setup_is_called
+    attr_reader :already_initialized
 
     def setup
-      raise "Remexify: do not call setup the second time, use Remexify.config to modify changes if that cannot be made during setup phase"
+      raise "Remexify: do not call setup the second time, use Remexify.config to modify changes if that cannot be made during setup phase" if @already_initialized
 
       # initialisation
       config.model = nil
@@ -28,7 +28,7 @@ module Remexify
       config.accepted_exceptions = []
 
       yield config
-      @setup_is_called = true
+      @already_initialized = true
 
       # warning if accepted_exceptions is defined but String is not included
       if config.accepted_exceptions.any? && !config.accepted_exceptions.include?(String)
