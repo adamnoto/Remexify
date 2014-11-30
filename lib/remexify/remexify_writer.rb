@@ -142,8 +142,7 @@ module Remexify
         config.model.connection.begin_transaction
         config.model.connection.execute <<-SQL
           INSERT INTO #{config.model_owner.table_name} (
-           log_md5, identifier_id
-          ) VALUES (#{md5}, #{owned_by})
+           log_md5, identifier_id) VALUES (#{md5}, #{owned_by})
         SQL
         config.model.connection.commit_transaction
       end
