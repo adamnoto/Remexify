@@ -54,7 +54,7 @@ is nothing but a StandardError subclassed.
 
 If Remexify caught exceptions any of the above class, it will mark `already_logged` to `true`. Remexify won't log it again when parent/calling method rescue the error.
 
-## Usage
+## Basic Usage
 
 To use this gem, you need to generate some files first. You can let the gem to generate all required files, including migration and initializer, for you. To do so, issue:
 
@@ -128,7 +128,7 @@ You may also delete all the logs in your database:
 
     Remexify.delete_all_logs
 
-## What is recorded?
+## What is recorded in the database?
 
 These are the fields that is recorded:
 
@@ -163,12 +163,12 @@ I afraid you think that I encourage the use of error for control statement. Not 
 > this error in a row in your database, that the un-asynchronous caller can check regularly to see if the row is indicated
 > as erroneous. And then, the end user can be notified of their erroneous action.
 
-So, how could you do this? It's easy, use either:
+So, how could you accomplish that? It's easy, use either:
 
 1. `discarded_exceptions` to enlist explicitly class of exception you don't want to log.
 2. `accepted_exceptions` to enlist those that Remexify will log.
 
-Practically, if you want to log any error but specific exception, then during initialisation you define:
+If you want to log any error but specific exception, then during initialisation you define:
 
 ```ruby
 Remexify.setup do |config|
@@ -192,6 +192,81 @@ end
 
 As simply as that, however, be informed that `discarded_exceptions` takes precedence. So, if you define a class as being both
 discarded and accepted, it will certainly be discarded. As simply as that, as always.
+
+## Associate logs to user
+
+Consider this scenario
+
+> You have a logged in user. But, your user did something that trigger an exception. But, not only that you want to
+> log the exception, you also want to associate the exception with the user triggering the error.
+
+Remexify from version 1.2.0 have the ability to record the user that trigger the error. When you log an error,
+you can specify who owned the exception through `owned_by` attribute:
+
+```ruby
+Remexify.error "Some serious error by user with id 1", owned_by: 1
+```
+
+The code above will log an error, and associate the error with user id 1. You can specify the ID as string, or as integer,
+but in the database it will be converted to String.
+
+In case you needed to log any other information regarding to the ownership, Remexify provides you with 3 additional 
+attributes:
+
+1. `owned_param1`
+2. `owned_param2`
+3. `owned_param3`
+
+Imagine that not only you have user table, you also have admin, and company table which all of them have the ability
+to log into the database. You have user with ID 1, and an admin with ID 1 stored in their respective table. When error
+is triggered by the admin ID 1, Remexify record the error as you command. However, when you are to retrieve errors triggered
+by the admin ID 1, you have difficulty because there's also an error recorded with ID 1 but he is not an admin. but a user. 
+Obviously, storing mere ID may not help, you need to discriminate further.
+
+Here is how you would remedy the problem:
+
+```ruby
+Remexify.error "A serious error", owned_by: admin.id, owned_param1: admin.class.name
+```
+
+So far so good, but how to retrieve errors by user?
+
+As usual, we need to use `Remexify::Retrieve` whether you will retrieve `all()` or `today()` then you can specify further
+certain variable such as the `level`, the `order` and so on. Then, to retrieve by the admin's ID:
+
+```ruby
+Remexify::Retrieve.all owned_by: admin.id
+```
+
+Or, when you want to retrieve all error triggered by an admin, assuming you log the class name as `owned_param1`:
+
+```ruby
+Remexify::Retrieve.all owned_param1: admin.class.name
+```
+
+You can as well combine both command:
+
+```ruby
+Remexify::Retrieve.all owned_by: admin.id, owned_param1: admin.class.name
+```
+
+A slightly complex error:
+
+```ruby
+Remexify::Retrieve.all owned_param1: admin.class.name, level: ">= 200"
+```
+
+## Upgrading
+
+1. Upgrading from 1.0.0 or 1.1.0 to 1.2.0
+  1. Delete your Remexify model (you may backup the table contents, if you still need it)
+  2. Delete your Remexify model's migration
+  3. Copy all the configuration you have for your Remexify.
+  4. Delete your configuration file.
+  5. `bundle install` the latest gem, and generate the models.
+  6. Migrate the models.
+  7. Reconfigure your Remexify configuration file (if you write custom configuration).
+  8. Done.
 
 ## Contributing
 
