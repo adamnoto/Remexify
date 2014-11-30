@@ -3,7 +3,7 @@ $cached_error = []
 module Remexify
   class << self
     # options = class, method, line, file, params/param/parameters, desc/description
-    # extract_params_from, object, owned_by
+    # extract_params_from, object, owned_by, owned_param1, owned_param2, owned_param3
     def write(level, message_object, options = {})
       if (message_object.is_a?(StandardError) || message_object.is_a?(RuntimeError)) && message_object.already_logged
         # do not log exception that has been logged
@@ -141,10 +141,15 @@ module Remexify
       # if owner_by is given, associate this log to the owned_by user
       if !options[:owned_by].blank? && (config.model_owner < ActiveRecord::Base)
         owned_by = config.model.connection.quote(options[:owned_by])
+        owned_param1 = config.model.connection.quote(options[:owned_param1])
+        owned_param2 = config.model.connection.quote(options[:owned_param2])
+        owned_param3 = config.model.connection.quote(options[:owned_param3])
+
         config.model.connection.begin_transaction
         config.model.connection.execute <<-SQL
           INSERT INTO #{config.model_owner.table_name} (
-           log_md5, identifier_id) VALUES (#{qmd5}, #{owned_by})
+           log_md5, identifier_id, param1, param2, param3)
+           VALUES (#{qmd5}, #{owned_by}, #{owned_param1}, #{owned_param2}, #{owned_param3})
         SQL
         config.model.connection.commit_transaction
       end

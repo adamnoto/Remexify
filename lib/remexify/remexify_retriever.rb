@@ -4,7 +4,7 @@ module Remexify
   module Retrieve
     class << self
       def all(options = {})
-        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by(options)
+        logs = Remexify::Retrieve::Filter.owned_by(options)
         logs = Remexify::Retrieve::Filter.order logs, options
         logs = Remexify::Retrieve::Filter.level logs, options
 
@@ -12,7 +12,7 @@ module Remexify
       end
 
       def today(options = {})
-        logs = options[:owned_by].blank? ? Remexify.config.model.all : Remexify::Retrieve::Filter.owned_by(options)
+        logs = Remexify::Retrieve::Filter.owned_by(options)
         logs = logs.where(created_at: Time.now.beginning_of_day..Time.now.end_of_day)
         logs = Remexify::Retrieve::Filter.order logs, options
         logs = Remexify::Retrieve::Filter.level logs, options
@@ -61,8 +61,16 @@ module Remexify
     end
 
     def owned_by(options)
-      my_logs = Remexify.config.model_owner.where(identifier_id: options.fetch(:owned_by)).pluck(:log_md5)
-      owned_logs = Remexify.config.model.where(md5: my_logs).all
+      if options[:owned_by] || options[:owned_param1] || options[:owned_param2] || options[:owned_param3]
+        my_logs = Remexify.config.model_owner.where(identifier_id: options.fetch(:owned_by))
+        my_logs = my_logs.where(param1: options[:owned_param1])
+        my_logs = my_logs.where(param2: options[:owned_param2])
+        my_logs = my_logs.where(param3: options[:owned_param3])
+        my_logs = my_logs.pluck(:log_md5)
+        owned_logs = Remexify.config.model.where(md5: my_logs).all
+      else
+        owned_logs = Remexify.config.model.all
+      end
       owned_logs
     end
   end

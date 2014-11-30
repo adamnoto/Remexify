@@ -1,24 +1,30 @@
 # Remexify
 
-Remexify is probably the world's simplest Rails-only gem to write logs into your database's table. It takes care of your
-everyday logging mechanism, but yet is not a dictator enough to make you lose control. No fluff, and to-the-point!
+Remexify is the world's simplest Rails-only ActiveRecord gem to write/retrieve logs written into your database's table. 
+Its philosophy is not to be a dictator gem, so you have your control over what to log, the log level, and et cetera. 
+Remexify is happy to be no fluff, and to-the-point!
 
 ## Behind the scene
 
 > Roses are red violets are blue, a log is not a poem it should be accessible to you.
 
 Remexify is always by my side whenever I need to log something into the database. I am tired of managing different logger,
-or duplicate codes accross multitude of projects I am working on.
+or duplicatings codes accross multitude of projects I am working on only to have this kind of ability that I wanted.
+Therefore, I refactor it and made it into a gem available to all projects a bundle away not only for mine, but also for yours. 
+I wish it will help you somehow.
 
 ## Why should you use Remexify?
 
-1. Remexify help you log to your own database, by giving you the control and ease on when/where to do that.
-2. Remexify let you *censor* specific error classes which you don't want it to appear in the backtrace.
-3. Remexify let you define acceptable/unacceptable classes of error which you can use to control what instance of exception class you want to dismiss, or to keep.
-4. Remexify logs similar error once, but will record the frequency if similar error occurred again.
-5. Remexify let you log not only an error, but also info, log, etc. Actually, "error" is just a numeric constant.
-6. Remexify gives you the flexible means of accessing your logged error.
-7. Remexify is free and open source for all the People of Earth.
+Remexify...
+
+1. Help you log to your own database, by giving you the control and ease on when/where to do that.
+2. Let you log not only an error, but also info, log, etc. Actually, "error" is just a numeric constant.
+3. Gives you the flexible means of accessing your logged error.
+4. Let you *censor* specific error classes which you don't want it to appear in the backtrace.
+5. Let you define acceptable/unacceptable classes of error which you can use to control what instance of exception class you want to dismiss, or to keep.
+6. Logs similar error once, but will record the frequency if similar error occurred again.
+7. Can associate your logs to certain user, object, or anything.
+7. Is free and open source for all the People of Earth.
 
 ## Installation
 
@@ -86,7 +92,7 @@ Some level is predefined:
     WARNING = 200
     ERROR = 300
 
-Thus, if you invoke `info()` level will be 100.
+Thus, if you want to write info log by invoking `info()` then the log will be recorded with level set to 100.
 
 The obj can be any object. You can pass it a(n instance of) `String`, or an `Exception`, `StandardError`, `RuntimeError`, `DisplayableError`.
 
@@ -113,6 +119,10 @@ Or, you may also retrieve all logs recorded today:
 Both methods accepts a hash to which you can indicate an ordering of retrieved data:
 
     Remexify::Retrieve.all order: "created_at DESC"
+
+A rather complex query:
+
+    Remexify::Retrieve.all(order: "level ASC", owned_by: "1", level: "=200")
     
 You may also delete all the logs in your database:
 
@@ -204,3 +214,4 @@ by Adam Pahlevi Baihaqi
   - User can configure `accepted_exceptions`
   - User can configure `discarded_exceptions`
   - Ability to associate log to specific user
+  - Ability to retrieve logs that owned by certain identifier_id (like, user's id)
