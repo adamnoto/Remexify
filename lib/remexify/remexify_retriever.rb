@@ -67,9 +67,10 @@ module Remexify
         else
           my_logs = Remexify.config.model_owner.all
         end
-        my_logs = my_logs.where(param1: options[:owned_param1])
-        my_logs = my_logs.where(param2: options[:owned_param2])
-        my_logs = my_logs.where(param3: options[:owned_param3])
+        opkeys = options.keys
+        my_logs = my_logs.where(param1: options[:owned_param1]) if opkeys.include? :owned_param1
+        my_logs = my_logs.where(param2: options[:owned_param2]) if opkeys.include? :owned_param2
+        my_logs = my_logs.where(param3: options[:owned_param3]) if opkeys.include? :owned_param3
         my_logs = my_logs.pluck(:log_md5)
         owned_logs = Remexify.config.model.where(md5: my_logs).all
       else
