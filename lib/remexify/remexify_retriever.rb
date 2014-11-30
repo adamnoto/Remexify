@@ -62,7 +62,11 @@ module Remexify
 
     def owned_by(options)
       if options[:owned_by] || options[:owned_param1] || options[:owned_param2] || options[:owned_param3]
-        my_logs = Remexify.config.model_owner.where(identifier_id: options.fetch(:owned_by))
+        if options[:owned_by]
+          my_logs = Remexify.config.model_owner.where(identifier_id: options.fetch(:owned_by))
+        else
+          my_logs = Remexify.config.model_owner.all
+        end
         my_logs = my_logs.where(param1: options[:owned_param1])
         my_logs = my_logs.where(param2: options[:owned_param2])
         my_logs = my_logs.where(param3: options[:owned_param3])
