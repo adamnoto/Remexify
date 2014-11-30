@@ -61,8 +61,8 @@ module Remexify
     end
 
     def owned_by(options)
-      owned_logs = Remexify.config.model_owner.where(identifier_id: options.fetch(:owned_by))
-      owned_logs.map! { |ol| Remexify.config.model.where(md5: ol.log_md5).first! }
+      owned_logs = Remexify.config.model_owner.where(identifier_id: options.fetch(:owned_by)).pluck(:log_md5)
+      owned_logs.map! { |log_md5| Remexify.config.model.where(md5: log_md5).first! }
       owned_logs
     end
   end
