@@ -83,6 +83,7 @@ module Remexify
       message = message.gsub(/:0x[0-9a-fA-F]+/i, "")
       hashed = "#{message}#{class_name}"
       md5 = Digest::MD5.hexdigest hashed
+      md5 = config.model.connection.quote md5
 
       # assure md5 is not yet exist, if exist, don't save
       log = config.model.where(md5: md5).first
@@ -90,7 +91,6 @@ module Remexify
         log.frequency += 1
         log.save
       else
-        md5 = config.model.connection.quote md5
         message = config.model.connection.quote message
         backtrace = backtrace.blank? ? "null" : config.model.connection.quote(backtrace)
         class_name = config.model.connection.quote(class_name)
