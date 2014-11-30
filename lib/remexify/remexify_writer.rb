@@ -82,8 +82,10 @@ module Remexify
       # so: #<#<Class:0x007f9492c00430>:0x007f9434ccab> will just be #<#<Class>>
       message = message.gsub(/:0x[0-9a-fA-F]+/i, "")
       hashed = "#{message}#{class_name}"
+      # do not quote md5 directly, it is used to query .where
       md5 = Digest::MD5.hexdigest hashed
-      md5 = config.model.connection.quote md5
+      # the quoted version of md5, do not replace the original value
+      qmd5 = config.model.connection.quote md5
 
       # assure md5 is not yet exist, if exist, don't save
       log = config.model.where(md5: md5).first
@@ -124,7 +126,7 @@ module Remexify
            md5, level, message, backtrace,
            class_name, method_name, line, file_name,
            parameters, description, created_at, updated_at)
-          VALUES (#{md5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
+          VALUES (#{qmd5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
            #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
            #{time_now}, #{time_now});
         SQL
@@ -142,7 +144,7 @@ module Remexify
         config.model.connection.begin_transaction
         config.model.connection.execute <<-SQL
           INSERT INTO #{config.model_owner.table_name} (
-           log_md5, identifier_id) VALUES (#{md5}, #{owned_by})
+           log_md5, identifier_id) VALUES (#{qmd5}, #{owned_by})
         SQL
         config.model.connection.commit_transaction
       end
