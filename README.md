@@ -9,22 +9,22 @@ Remexify is happy to be no fluff, and to-the-point!
 > Roses are red violets are blue, a log is not a poem it should be accessible to you.
 
 Remexify is always by my side whenever I need to log something into the database. I am tired of managing different logger,
-or duplicatings codes accross multitude of projects I am working on only to have this kind of ability that I wanted.
-Therefore, I refactor it and made it into a gem available to all projects a bundle away not only for mine, but also for yours. 
-I wish it will help you somehow.
+or duplicating codes accross multitude of projects for getting simple features, no fluff, that I had imagining having.
+Therefore, I refactor it, and made it into a gem, so that it become available to all projects a bundle away. 
+I wish it will help you with something somehow.
 
 ## Why should you use Remexify?
 
 Remexify...
 
-1. Help you log to your own database, by giving you the control and ease on when/where to do that.
+1. Help you log to your own database, giving you the control and ease on when/where to do that.
 2. Let you log not only an error, but also info, log, etc. Actually, "error" is just a numeric constant.
-3. Gives you the flexible means of accessing your logged error.
-4. Let you *censor* specific error classes which you don't want it to appear in the backtrace.
-5. Let you define acceptable/unacceptable classes of error which you can use to control what instance of exception class you want to dismiss, or to keep.
-6. Logs similar error once, but will record the frequency if similar error occurred again.
-7. Can associate your logs to certain user, object, or anything.
-7. Is free and open source for all the People of Earth.
+3. Give you the flexible means of accessing your logged error.
+4. Let you *censor* string in the backtrace so it won't pollute your backtrace from noisy, unnecessary information.
+5. Let you define acceptable/unacceptable classes to be logged.
+6. Logs error once, and increase its occurence frequency so no 2 similar logs are duplicate of each other.
+7. Can associate your logs to certain user, object, or anything in order to trace who trigger the error.
+7. It is free, 100% I contribute it as an open source for all the People of Earth to use it.
 
 ## Installation
 
@@ -40,30 +40,30 @@ Or install it yourself as:
 
     $ gem install remexify
 
+Then, you need to generate some models that the gem needs, here we give our model name of `System::Loggers`:
+
+    rails g remexify System::Loggers
+    
+You can name your log class anything, such as `System::Loggers`. After that, you have to migrate it:
+
+    rake db:migrate
+    
 ## Design Decision
 
-This gem monkey patch attribute already_logged(?) in two standard ruby error classes:
+By using this gem, it will monkey patch `already_logged` into these two classes:
 
 1. RuntimeError
 2. StandardError
  
-`already_logged` (or `already_logged?`) will return nil if the exception is not yet logged.
-
-Additionally, there is new error class `DisplayableError`. DisplayableError will be quite handy if you want to raise an enduser-visible error. In your controller, you may only allow an instance of DisplayableError to be displayed. DisplayableError
-is nothing but a StandardError subclassed.
-
-If Remexify caught exceptions any of the above class, it will mark `already_logged` to `true`. Remexify won't log it again when parent/calling method rescue the error.
+`already_logged` (or `already_logged?`) will return nil if the exception is not yet logged. Additionally, there is new error class 
+`DisplayableError`. You can set apart user-visible error for system-only administrative-level error through the use of
+`DisplayableError`. Thus, in your controller, you may allow only an instance of DisplayableError to be displayed. DisplayableError
+is nothing but a sub-classed StandardError.
 
 ## Basic Usage
 
-To use this gem, you need to generate some files first. You can let the gem to generate all required files, including migration and initializer, for you. To do so, issue:
+### Logging
 
-    rails g remexify System::Loggers
-    
-You can name your log class anything, such as `System::Loggers`. After that, you have to migrate it.
-
-    rake db:migrate
-    
 Finally, you can use the gem!
 
     Remexify.log err
@@ -77,16 +77,24 @@ In a rails app, you may invoke the `error()` like this:
       Remexify.error e, file: __FILE__, class: self.class.name, method: __method__, line: __LINE__
       raise e
     end 
-            
-Remexify have 4 static functions:
+
+Starting from version 1.2.0, you can omit `file`, `method`, and `line` from the hash, thus the gem will automatically deduct
+those remaining 3 essential debugging information.
+
+```ruby
+      Remexify.error e, class: self.class.name
+```
+
+Instead of `error`, Remexify also provide you with other handy method for logging, those are:
 
     def write(level, obj, options = {}); end;
     def info(obj, options = {}); end;
     def warning(obj, options = {}); end;
     def error(obj, options = {}); end;
-    
-`write()` is the most basic function, that you will only need to use if you want to define the level yourself.
-Some level is predefined:
+
+You may defined your own level, if you are not satisfied with already-given `info`, `warning, and `error`. To do so,
+you will utilise the `write` function. Actually, `write` is the basic function on which the 3 functions above depend on.
+An error, a warning or an info in Remexify is just a constant:
 
     INFO = 100
     WARNING = 200
@@ -94,21 +102,39 @@ Some level is predefined:
 
 Thus, if you want to write info log by invoking `info()` then the log will be recorded with level set to 100.
 
-The obj can be any object. You can pass it a(n instance of) `String`, or an `Exception`, `StandardError`, `RuntimeError`, `DisplayableError`.
+```ruby
+def info(message_object, options = {})
+  write INFO, message_object, options
+end
+```
+
+The obj can be any object. You can pass it a `String`, or an `Exception`, `StandardError`, `RuntimeError`, `DisplayableError`.
 
 It will **automatically generate the backtrace if the object passed is an exception.**
 
-Options can have:
 
-1. :method
-2. :line
-3. :file
-4. :parameters
-5. :description
+### Accepted options for logging
 
-All those options are optional, and, if given, will be stored in the database.
+Options accepts those parameters:
 
-In order to retrieve the recorded logs, you will deal with Remexify's Retrieve module. You may retrieve all logs:
+| Option               | Optional? | Description                                                                                                   |
+|----------------------|-----------|---------------------------------------------------------------------------------------------------------------|
+| :class               | N         | The class that triggers the error                                                                             |
+| :method              | Y         | The method that triggers the error                                                                            |
+| :line                | Y         | The line the error is triggered                                                                               |
+| :file                | Y         | The file the error is triggered                                                                               |
+| :params              | Y         | Additional information (such as query parameters) that may help later on in an effort to replicate the error. |
+| :desc                | Y         | Description of the error                                                                                      |
+| :extract_params_from | Y         | Specify an ActiveRecord model instance, and all of its attributes will be logged as `params`                  |
+| :owned_by            | Y         | Associate the error to certain entity                                                                         |
+| :owned_param1        | Y         | Further discrimination of owner                                                                               |
+| :owned_param2        | Y         | Further discrimination of owner                                                                               |
+| :owned_param3        | Y         | Further discrimination of owner                                                                               |
+| :object              | Y         | Object of an ActiveRecord model, snatch information about why the error occur if such an information exist.   |
+
+#### Retrieving logs
+
+You will need to deal with an extremely simple Remexify's `Retrieve` module. You may retrieve all logs:
 
     Remexify::Retrieve.all
     
@@ -128,7 +154,7 @@ You may also delete all the logs in your database:
 
     Remexify.delete_all_logs
 
-## What is recorded in the database?
+### What is recorded in the database?
 
 These are the fields that is recorded:
 
@@ -290,3 +316,4 @@ by Adam Pahlevi Baihaqi
   - User can configure `discarded_exceptions`
   - Ability to associate log to specific user
   - Ability to retrieve logs that owned by certain identifier_id (like, user's id)
+  - You are no longer required to specify `file`, `class` and `method` as Remexify now is able to deduct such infomation from the calling trace.
