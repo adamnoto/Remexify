@@ -120,8 +120,8 @@ module Remexify
         if config.model.connection.transaction_open?
           config.model.connection.rollback_transaction
         end
-        config.model.connection.begin_transaction
-        config.model.connection.execute <<-SQL
+        ActiveRecord::Base.transaction do
+          config.model.connection.execute <<-SQL
           INSERT INTO #{config.model.table_name} (
            md5, level, message, backtrace,
            class_name, method_name, line, file_name,
@@ -129,8 +129,8 @@ module Remexify
           VALUES (#{qmd5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
            #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
            #{time_now}, #{time_now});
-        SQL
-        config.model.connection.commit_transaction
+          SQL
+        end
       end
 
       # mark already logged if DisplayableError
@@ -145,13 +145,15 @@ module Remexify
         owned_param2 = config.model.connection.quote(options[:owned_param2])
         owned_param3 = config.model.connection.quote(options[:owned_param3])
 
-        config.model.connection.begin_transaction
-        config.model.connection.execute <<-SQL
+        # config.model.connection.begin_transaction
+        ActiveRecord::Base.transaction do
+          config.model.connection.execute <<-SQL
           INSERT INTO #{config.model_owner.table_name} (
            log_md5, identifier_id, param1, param2, param3)
            VALUES (#{qmd5}, #{owned_by}, #{owned_param1}, #{owned_param2}, #{owned_param3})
-        SQL
-        config.model.connection.commit_transaction
+          SQL
+        end
+        # config.model.connection.commit_transaction
       end
 
       nil # don't return anything for logging!
