@@ -36,7 +36,19 @@ module Remexify
       end
 
       # model must exists as ActiveRecord model. model_owner is not necessary to exists at all
-      raise "Remexify.config.model is not an ActiveRecord model" unless config.model < ActiveRecord::Base
+      if defined?(ActiveRecord::Base) && defined?(Mongoid::Document)
+        if (config.model < ActiveRecord::Base) || (config.model < Mongoid::Document)
+          # good!
+        else
+          raise "Remexify.config.model is neither an ActiveRecord model or Mongoid::Document"
+        end
+      elsif defined?(ActiveRecord::Base)
+        raise "Remexify.config.model is not an ActiveRecord model" unless config.model < ActiveRecord::Base
+      elsif defined?(Mongoid::Document)
+        raise "Remexify.config.model is not a Mongoid::Document" unless config.model < Mongoid::Document
+      else
+        raise "Remexify.config.model is neither an ActiveRecord model or Mongoid::Document"
+      end
     end
   end
 

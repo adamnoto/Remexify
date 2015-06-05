@@ -1,16 +1,13 @@
-require "rails/generators"
+require "rails/generators/active_record"
 require "rails/generators/migration"
-require "rails/generators/named_base"
 
-module Remexify
+module ActiveRecord
   module Generators
-    class RemexifyGenerator < Rails::Generators::NamedBase
+    class RemexifyGenerator < ActiveRecord::Generators::Base
       include Rails::Generators::Migration
       source_root File.expand_path("../templates", __FILE__)
 
-      desc "Generates a model with the given NAME for remexify to log error/informations"
-
-      namespace "remexify"
+      hook_for :orm
 
       # to avoid next migration numbers having the same exact identity
       @secondth = 1
@@ -20,11 +17,13 @@ module Remexify
         (Time.now.utc. + @secondth).strftime("%Y%m%d%H%M%S")
       end
 
+      # copy the migration
       def copy_migration
         migration_template "create_remexify_lognotes.rb", "db/migrate/create_remexify_lognotes.rb"
         migration_template "create_remexify_logowners.rb", "db/migrate/create_remexify_logowners.rb"
       end
 
+      # generate appropriate model
       def generate_model
         # don't just call invoke without Rails::Generators because Thor task only run once.
         Rails::Generators.invoke "active_record:model", [name, "--no-migration"]
