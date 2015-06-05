@@ -2,7 +2,7 @@ require "rails/generators/named_base"
 
 module Mongoid
   module Generators
-    class DeviseGenerator < Rails::Generators::NamedBase
+    class RemexifyGenerator < Rails::Generators::NamedBase
       source_root File.expand_path("../templates", __FILE__)
 
       def generate_log_model
