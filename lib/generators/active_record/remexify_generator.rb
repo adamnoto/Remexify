@@ -7,8 +7,6 @@ module ActiveRecord
       include Rails::Generators::Migration
       source_root File.expand_path("../templates", __FILE__)
 
-      hook_for :orm
-
       # to avoid next migration numbers having the same exact identity
       @secondth = 1
 
