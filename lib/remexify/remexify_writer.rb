@@ -39,6 +39,8 @@ module Remexify
         backtrace = ""
       end
 
+      backtrace = "null" if backtrace.blank?
+
       # standardize into options[:parameters]
       options[:parameters] = options[:param] if options[:param]
       options[:parameters] = options[:params] if options[:params]
@@ -104,7 +106,7 @@ module Remexify
       # do not quote md5 directly, it is used to query .where
       md5 = Digest::MD5.hexdigest hashed
       # the quoted version of md5, do not replace the original value
-      qmd5 = config.model.connection.quote md5
+      qmd5 = md5
 
       # assure md5 is not yet exist, if exist, don't save
       log = config.model.where(md5: md5).first
@@ -112,9 +114,7 @@ module Remexify
         log.frequency += 1
         log.save
       else
-        message = config.model.connection.quote message
-        backtrace = backtrace.blank? ? "null" : config.model.connection.quote(backtrace)
-        class_name = config.model.connection.quote(class_name)
+
 
         method = line = file = "null"
         if Kernel.respond_to? :caller_locations
@@ -128,28 +128,36 @@ module Remexify
           line = options[:line] unless options[:line].blank?
           file = options[:file] unless options[:file].blank?
         end
-        method = config.model.connection.quote(method)
-        line = config.model.connection.quote(line)
-        file = config.model.connection.quote(file)
 
-        parameters = options[:parameters].blank? ? "null" : config.model.connection.quote(options[:parameters].inspect)
-        descriptions = options[:description].blank? ? "null" : config.model.connection.quote(options[:description])
-        time_now = config.model.connection.quote(Time.now.strftime("%Y-%m-%d %H:%M:%S"))
+        parameters = options[:parameters].blank? ? "null" : options[:parameters].inspect
+        descriptions = options[:description].blank? ? "null" : options[:description]
+        time_now = Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
         if config.model.connection.transaction_open?
           config.model.connection.rollback_transaction
         end
 
         if defined?(ActiveRecord::Base)
+          qmd5 = config.model.connection.quote md5
+          message = config.model.connection.quote message
+          backtrace = config.model.connection.quote backtrace
+          class_name = config.model.connection.quote class_name
+          method = config.model.connection.quote method
+          line = config.model.connection.quote line
+          file = config.model.connection.quote file
+          parameters = config.model.connection.quote parameters
+          descriptions = config.model.connection.quote parameters
+          time_now = config.model.connection.quote time_now
+
           ActiveRecord::Base.transaction do
             config.model.connection.execute <<-SQL
-          INSERT INTO #{config.model.table_name} (
-           md5, level, message, backtrace,
-           class_name, method_name, line, file_name,
-           parameters, description, created_at, updated_at)
-          VALUES (#{qmd5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
-           #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
-           #{time_now}, #{time_now});
+              INSERT INTO #{config.model.table_name} (
+               md5, level, message, backtrace,
+               class_name, method_name, line, file_name,
+               parameters, description, created_at, updated_at)
+              VALUES (#{qmd5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
+               #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
+               #{time_now}, #{time_now});
             SQL
           end
         elsif defined?(Mongoid::Document)
