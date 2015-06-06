@@ -133,24 +133,25 @@ module Remexify
         descriptions = options[:description].blank? ? "null" : options[:description]
         time_now = Time.now.strftime("%Y-%m-%d %H:%M:%S")
 
-        if config.model.connection.transaction_open?
-          config.model.connection.rollback_transaction
-        end
-
         if defined?(ActiveRecord::Base)
-          qmd5 = config.model.connection.quote md5
-          message = config.model.connection.quote message
-          backtrace = config.model.connection.quote backtrace
-          class_name = config.model.connection.quote class_name
-          method = config.model.connection.quote method
-          line = config.model.connection.quote line
-          file = config.model.connection.quote file
-          parameters = config.model.connection.quote parameters
-          descriptions = config.model.connection.quote parameters
-          time_now = config.model.connection.quote time_now
+          if config.model < ActiveRecord::Base
+            if config.model.connection.transaction_open?
+              config.model.connection.rollback_transaction
+            end
 
-          ActiveRecord::Base.transaction do
-            config.model.connection.execute <<-SQL
+            qmd5 = config.model.connection.quote md5
+            message = config.model.connection.quote message
+            backtrace = config.model.connection.quote backtrace
+            class_name = config.model.connection.quote class_name
+            method = config.model.connection.quote method
+            line = config.model.connection.quote line
+            file = config.model.connection.quote file
+            parameters = config.model.connection.quote parameters
+            descriptions = config.model.connection.quote parameters
+            time_now = config.model.connection.quote time_now
+
+            ActiveRecord::Base.transaction do
+              config.model.connection.execute <<-SQL
               INSERT INTO #{config.model.table_name} (
                md5, level, message, backtrace,
                class_name, method_name, line, file_name,
@@ -158,23 +159,26 @@ module Remexify
               VALUES (#{qmd5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
                #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
                #{time_now}, #{time_now});
-            SQL
+              SQL
+            end
           end
         elsif defined?(Mongoid::Document)
-          new_log = config.model.new
-          new_log.md5 = qmd5
-          new_log.level = Integer(level)
-          new_log.message = message
-          new_log.backtrace = backtrace
-          new_log.class_name = class_name
-          new_log.method_name = method
-          new_log.line = line
-          new_log.file_name = file
-          new_log.parameters = parameters
-          new_log.description = descriptions
-          new_log.created_at = time_now
-          new_log.updated_at = time_now
-          new_log.save
+          if config.model < Mongoid::Document
+            new_log = config.model.new
+            new_log.md5 = qmd5
+            new_log.level = Integer(level)
+            new_log.message = message
+            new_log.backtrace = backtrace
+            new_log.class_name = class_name
+            new_log.method_name = method
+            new_log.line = line
+            new_log.file_name = file
+            new_log.parameters = parameters
+            new_log.description = descriptions
+            new_log.created_at = time_now
+            new_log.updated_at = time_now
+            new_log.save
+          end
         end
       end
 

@@ -25,7 +25,7 @@ module Mongoid
 
   field :message,     type: String
   field :backtrace,   type: String
-  field :backtrace,   type: String
+  field :file_name,   type: String
 
   field :class_name,  type: String
   field :method_name, type: String
