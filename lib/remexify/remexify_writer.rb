@@ -48,24 +48,43 @@ module Remexify
       # will override the options[:parameters] if this block execute successfully
       if options[:extract_params_from]
         ar_message_objectect = options[:extract_params_from]
-        if ar_message_objectect.class < ActiveRecord::Base
-          if ar_message_objectect.respond_to?(:attribute_names) && ar_message_objectect.respond_to?(:read_attribute)
-            ar_attributes = ar_message_objectect.attribute_names
-            attributes = {}
+
+        def parse_model_fields model
+          attributes = {}
+          if model.respond_to?(:attribute_names) && model.respond_to?(:read_attribute)
+            ar_attributes = model.attribute_names
             ar_attributes.each do |attr|
-              attributes[attr.to_s] = ar_message_objectect.read_attribute attr.to_sym
+              attributes[attr.to_s] = model.read_attribute attr.to_sym
             end
             options[:parameters] = attributes
           end
+          attributes
+        end
+
+        if defined?(ActiveRecord::Base)
+          options[:parameters] = parse_model_fields(ar_message_objectect) if ar_message_objectect.class < ActiveRecord::Base
+        end
+
+        if defined?(Mongoid::Document)
+          options[:parameters] = parse_model_fields(ar_message_objectect) if ar_message_objectect.class < Mongoid::Document
         end
       end
 
       # if object is given
       if options[:object]
-        # and is an active record
-        if options[:object].class < ActiveRecord::Base
+        parse_error_messages = false
+        # and is an active record/mongoid document
+        if defined?(ActiveRecord::Base)
+          parse_error_messages = true if options[:object].class < ActiveRecord::Base
+        end
+
+        if defined?(Mongoid::Document)
+          parse_error_messages = true if options[:object].class < Mongoid::Document
+        end
+
+        if parse_error_messages
           # append to message
-          message << "\n\nActiveRecord error messages:\n" << options[:object].errors.full_messages.join("\n")
+          message << "\n\nerror messages:\n" << options[:object].errors.full_messages.join("\n")
         end
       end
 
@@ -120,8 +139,10 @@ module Remexify
         if config.model.connection.transaction_open?
           config.model.connection.rollback_transaction
         end
-        ActiveRecord::Base.transaction do
-          config.model.connection.execute <<-SQL
+
+        if defined?(ActiveRecord::Base)
+          ActiveRecord::Base.transaction do
+            config.model.connection.execute <<-SQL
           INSERT INTO #{config.model.table_name} (
            md5, level, message, backtrace,
            class_name, method_name, line, file_name,
@@ -129,7 +150,23 @@ module Remexify
           VALUES (#{qmd5}, #{Integer level}, #{message}, #{backtrace}, #{class_name},
            #{method}, #{line}, #{file}, #{parameters}, #{descriptions},
            #{time_now}, #{time_now});
-          SQL
+            SQL
+          end
+        elsif defined?(Mongoid::Document)
+          new_log = config.model.new
+          new_log.md5 = qmd5
+          new_log.level = Integer(level)
+          new_log.message = message
+          new_log.backtrace = backtrace
+          new_log.class_name = class_name
+          new_log.method_name = method
+          new_log.line = line
+          new_log.file_name = file
+          new_log.parameters = parameters
+          new_log.description = descriptions
+          new_log.created_at = time_now
+          new_log.updated_at = time_now
+          new_log.save
         end
       end
 
@@ -139,21 +176,38 @@ module Remexify
       end
 
       # if owner_by is given, associate this log to the owned_by user
-      if !options[:owned_by].blank? && (config.model_owner < ActiveRecord::Base)
-        owned_by = config.model.connection.quote(options[:owned_by])
-        owned_param1 = config.model.connection.quote(options[:owned_param1])
-        owned_param2 = config.model.connection.quote(options[:owned_param2])
-        owned_param3 = config.model.connection.quote(options[:owned_param3])
+      unless options[:owned_by].blank?
+        owned_by = options[:owned_by]
+        owned_param1 = options[:owned_param1]
+        owned_param2 = options[:owned_param2]
+        owned_param3 = options[:owned_param3]
 
-        # config.model.connection.begin_transaction
-        ActiveRecord::Base.transaction do
-          config.model.connection.execute <<-SQL
-          INSERT INTO #{config.model_owner.table_name} (
-           log_md5, identifier_id, param1, param2, param3)
-           VALUES (#{qmd5}, #{owned_by}, #{owned_param1}, #{owned_param2}, #{owned_param3})
-          SQL
+        if defined?(ActiveRecord::Base)
+          if config.model_owner < ActiveRecord::Base
+            owned_by = config.model.connection.quote(owned_by)
+            owned_param1 = config.model.connection.quote(owned_param1)
+            owned_param2 = config.model.connection.quote(owned_param2)
+            owned_param3 = config.model.connection.quote(owned_param3)
+
+            # config.model.connection.begin_transaction
+            ActiveRecord::Base.transaction do
+              config.model.connection.execute <<-SQL
+                INSERT INTO #{config.model_owner.table_name} (
+                  log_md5, identifier_id, param1, param2, param3)
+                VALUES (#{qmd5}, #{owned_by}, #{owned_param1}, #{owned_param2}, #{owned_param3})
+              SQL
+            end
+            # config.model.connection.commit_transaction
+          end
+        elsif defined?(Mongoid::Document)
+          if config.model_owner < Mongoid::Document
+            log_owner = config.model_owner.new
+            log_owner.owned_by = owned_by
+            log_owner.owned_param1 = owned_param1
+            log_owner.owned_param2 = owned_param2
+            log_owner.owned_param3 = owned_param3
+          end
         end
-        # config.model.connection.commit_transaction
       end
 
       nil # don't return anything for logging!

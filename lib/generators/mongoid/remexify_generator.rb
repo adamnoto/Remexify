@@ -6,11 +6,11 @@ module Mongoid
       source_root File.expand_path("../templates", __FILE__)
 
       def generate_log_model
-        invoke "mongoid:model", [name]
+        Rails::Generators.invoke "mongoid:model", [name]
       end
 
       def generate_logowner_model
-        invoke "mongoid:model", ["#{name}Owners"]
+        Rails::Generators.invoke "mongoid:model", ["#{name}Owners"]
       end
 
       def inject_log_model

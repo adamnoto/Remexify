@@ -1,25 +1,22 @@
 # Remexify
 
-Remexify is the world's simplest Rails-only ActiveRecord gem to write/retrieve logs written into your database's table. 
-Its philosophy is not to be a dictator gem, so you have your control over what to log, the log level, and et cetera. 
-Remexify is happy to be no fluff, and to-the-point!
+Remexify is the simplest way to log anything into your database, build for Rails. It supports ActiveRecord and Mongoid::Document. Remexify is happy to be no fluff, and to-the-point!
 
 ## Behind the scene
 
 > Roses are red violets are blue, a log is not a poem it should be accessible to you.
 
-Remexify is always by my side whenever I need to log something into the database. I am tired of managing different logger,
-or duplicating codes accross multitude of projects for getting simple features, no fluff, that I had imagining having.
+I always used Remexify whenever I need to log something into the database. I am tired of managing different logger,
+or duplicating codes across projects for getting the simple functionality that I had always wanted to have.
 Therefore, I refactor it, and made it into a gem, so that it become available to all projects a bundle away. 
-I wish it will help you with something somehow.
 
 ## Why should you use Remexify?
 
 Remexify...
 
 1. Help you log to your own database, giving you the control and ease on when/where to do that.
-2. Let you log not only an error, but also info, log, etc. Actually, "error" is just a numeric constant.
-3. Give you the flexible means of accessing your logged error.
+2. Let you log not only an error, but also info, log, etc. (Those info/log/etc definition is just a numeric constant.)
+3. Give you the easy, and flexible mean of accessing your log.
 4. Let you *censor* string in the backtrace so it won't pollute your backtrace from noisy, unnecessary information.
 5. Let you define acceptable/unacceptable classes to be logged.
 6. Logs error once, and increase its occurence frequency so no 2 similar logs are duplicate of each other.
@@ -78,8 +75,7 @@ In a rails app, you may invoke the `error()` like this:
       raise e
     end 
 
-Starting from version 1.2.0, you can omit `file`, `method`, and `line` from the hash, thus the gem will automatically deduct
-those remaining 3 essential debugging information.
+Starting from version 1.2.0, you can omit `file`, `method`, and `line` from the hash, which the gem will try to deduct by itself.
 
 ```ruby
       Remexify.error e, class: self.class.name
@@ -92,7 +88,7 @@ Instead of `error`, Remexify also provide you with other handy method for loggin
     def warning(obj, options = {}); end;
     def error(obj, options = {}); end;
 
-You may defined your own level, if you are not satisfied with already-given `info`, `warning, and `error`. To do so,
+You may define your own level, if you are not satisfied with the already-given `info`, `warning`, and `error`. To do so,
 you will utilise the `write` function. Actually, `write` is the basic function on which the 3 functions above depend on.
 An error, a warning or an info in Remexify is just a constant:
 
@@ -317,3 +313,5 @@ by Adam Pahlevi Baihaqi
   - Ability to associate log to specific user
   - Ability to retrieve logs that owned by certain identifier_id (like, user's id)
   - You are no longer required to specify `file`, `class` and `method` as Remexify now is able to deduct such infomation from the calling trace.
+- [v.1.3.0](#)
+  - Added support for Mongoid::Document
